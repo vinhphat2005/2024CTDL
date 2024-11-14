@@ -64,5 +64,8 @@
     <Text Include="MayBay.txt">
       <Filter>TextFiles</Filter>
     </Text>
+    <Text Include="ChuyenBay.txt">
+      <Filter>TextFiles</Filter>
+    </Text>
   </ItemGroup>
 </Project>
