@@ -5,14 +5,14 @@
 #include <windows.h>
 #include <conio.h>
 using namespace std;
-void setTextColor(int color) {
+void setTextColor(int color) 
+{
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, color);
 }
 void setWindowSize()
 {
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-
     // Lấy thông tin bộ đệm của màn hình console
     CONSOLE_SCREEN_BUFFER_INFO scrBufferInfo;
     GetConsoleScreenBufferInfo(hOut, &scrBufferInfo);
@@ -30,10 +30,10 @@ void setWindowSize()
 void disableResizeWindow()
 {
     HWND consoleWindow = GetConsoleWindow();
-    LONG style = GetWindowLong(consoleWindow, GWL_STYLE);
+    LONG_PTR style = GetWindowLongPtr(consoleWindow, GWL_STYLE);
     style &= ~WS_MAXIMIZEBOX; // Tắt nút "Maximize"
     style &= ~WS_SIZEBOX;     // Vô hiệu hóa thay đổi kích thước
-    SetWindowLong(consoleWindow, GWL_STYLE, style);
+    SetWindowLongPtr(consoleWindow, GWL_STYLE, style);
 }
 void hideCursor()
 {
@@ -70,173 +70,6 @@ void printAdminTitle(int screenWidth)
     centerText("|  _  ||     ||   |   | |  | |  |  |", screenWidth);
     centerText("|  |  ||     ||   |   | |  | |  |  |", screenWidth);
     centerText("|__|__||_____||___|___||____||__|__|", screenWidth);
-
+    cout << endl;
     setTextColor(7);
-}
-void Menu(int currentOption)
-{
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    int screenWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-    int screenHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-    system("cls");
-    const int menuSize = 6;
-    string menu[] = { "Hien thi danh sach cac chuyen bay", "Dat ve", "Quan ly", "chuc nang 4", "chuc nang 5", "Thoat" };
-    int verticalPadding = (screenHeight - menuSize) / 2;
-    // In ra các dòng trống để đưa menu xuống giữa màn hình theo chiều dọc
-    for (int i = 0; i < verticalPadding; i++) {
-        cout << endl;
-    }
-    printTitle(screenWidth);
-    for (int i = 0; i < menuSize; i++) {
-        if (i == currentOption) {
-            setTextColor(12);
-            centerText("> " + menu[i] + " <", screenWidth);
-        }
-        else {
-            setTextColor(11);
-            centerText(menu[i], screenWidth);
-        }
-    }
-    setTextColor(7);
-}
-void MenuAdmin(int currentOption)
-{
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    int screenWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-    int screenHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-    system("cls");
-    const int menuSize = 5;
-    string menu[] = { "Xu ly dat ve", "Xu ly tra ve", "Thong ke", "Quay ve Menu thuong", "Thoat"};
-    int verticalPadding = (screenHeight - menuSize) / 2;
-    // In ra các dòng trống để đưa menu xuống giữa màn hình theo chiều dọc
-    for (int i = 0; i < verticalPadding; i++) {
-        cout << endl;
-    }
-    printAdminTitle(screenWidth);
-    for (int i = 0; i < menuSize; i++) {
-        if (i == currentOption) {
-            setTextColor(12);
-            centerText("> " + menu[i] + " <", screenWidth);
-        }
-        else {
-            setTextColor(11);
-            centerText(menu[i], screenWidth);
-        }
-    }
-    setTextColor(7);
-}
-void Screen()
-{
-    vector<Airplane> danhSachMayBay;
-    string filename = "MayBay.txt";
-    setWindowSize();
-    disableResizeWindow();
-    hideCursor();
-    int currentOption = 0;
-    char key;
-    while (true) {
-        //In ra menu với con trỏ ở vị trí hiện tại
-        Menu(currentOption);
-        key = _getch();  // Đọc phím nhấn đầu tiên
-        if (key == -32) {
-            key = _getch();
-            if (key == 72) { // Nhận mũi tên (lên)
-                currentOption--;
-                if (currentOption < 0) {
-                    currentOption = 5; // Quay về cuối menu
-                }
-            }
-            else if (key == 80) { // Nhận mũi tên xuống
-                currentOption++;
-                if (currentOption > 5) {
-                    currentOption = 0; // Quay về đầu menu
-                }
-            }
-        }
-        else if (key == 13) {
-            system("cls");
-            switch (currentOption)
-            {
-            case 0:
-                cout << "Hien thi danh sach cac chuyen bay" << endl;
-                Airplane::loadAirplanesFromFile(danhSachMayBay, filename);
-                for (const auto& airplane : danhSachMayBay)
-                {
-                    airplane.displayAirplane();
-                }
-                break;
-            case 1:
-                cout << "Chuan bi dat ve" << endl;
-                break;
-            case 2:
-                cout << "Quan ly admin" << endl;
-                ScreenAdmin();
-                break;
-            case 3:
-                cout << "Ban da chon chuc nang 4" << endl;
-                break;
-            case 4:
-                cout << "ban da chon chuc nang 5" << endl;
-                break;
-            case 5:
-                cout << "Thoat thanh cong" << endl;
-                return;
-                break;
-            }
-
-            system("pause");
-        }
-    }
-}
-void ScreenAdmin()
-{
-    int currentOption = 0;
-    char key;
-    while (true) {
-        //In ra menu với con trỏ ở vị trí hiện tại
-        MenuAdmin(currentOption);
-        key = _getch();  // Đọc phím nhấn đầu tiên
-        if (key == -32) {
-            key = _getch();
-            if (key == 72) { // Nhận mũi tên (lên)
-                currentOption--;
-                if (currentOption < 0) {
-                    currentOption = 4; // Quay về cuối menu
-                }
-            }
-            else if (key == 80) { // Nhận mũi tên xuống
-                currentOption++;
-                if (currentOption > 4) {
-                    currentOption = 0; // Quay về đầu menu
-                }
-            }
-        }
-        else if (key == 13) {
-            system("cls");
-            switch (currentOption)
-            {
-            case 0:
-                cout << "Xu ly dat ve thanh cong" << endl;
-                break;
-            case 1:
-                cout << "xu ly tra ve" << endl;
-                break;
-            case 2:
-                cout << "Thong ke thanh cong" << endl;
-                break;
-            case 3:
-                currentOption = 0;
-                Screen();
-                break;
-            case 4:
-                cout << "Thoat thanh cong" << endl;
-                return;
-                break;
-            }
-
-            system("pause");
-        }
-    }
 }

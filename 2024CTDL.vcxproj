@@ -23,6 +23,7 @@
     <ClInclude Include="Airplane.h" />
     <ClInclude Include="Customer.h" />
     <ClInclude Include="Flight.h" />
+    <ClInclude Include="Screen.h" />
     <ClInclude Include="Ticket.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
@@ -32,6 +33,7 @@
     <ClCompile Include="Customer.cpp" />
     <ClCompile Include="Flight.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Ticket.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>

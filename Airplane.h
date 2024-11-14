@@ -8,13 +8,14 @@ class Airplane // luu o file MayBay.txt
 private:
     string airplaneID;
     int seatCount;
+    static string filename;
 public:
+    Airplane();
     Airplane(string aID, int seat);
-    string getaID();
-    void setaID(string);
     void inputAirplane();
     void displayAirplane() const;
-    static void loadAirplanesFromFile(vector<Airplane>& danhSachMayBay, const string& filename);
+    static void saveAirplanesToFile(vector<Airplane>& danhSachMayBay);
+    static void loadAirplanesFromFile(vector<Airplane>& danhSachMayBay);
 };
 
 #endif
