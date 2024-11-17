@@ -73,5 +73,8 @@
     <Text Include="ChuyenBay.txt">
       <Filter>TextFiles</Filter>
     </Text>
+    <Text Include="KhachHang.txt">
+      <Filter>TextFiles</Filter>
+    </Text>
   </ItemGroup>
 </Project>

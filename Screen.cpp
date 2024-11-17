@@ -5,6 +5,7 @@
 #include <conio.h>
 using namespace std;
 vector<Airplane> danhSachMayBay;
+vector<Flight> danhSachChuyenBay;
 void Menu(int currentOption)
 {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -39,8 +40,8 @@ void MenuAdmin(int currentOption)
     int screenWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
     int screenHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
     system("cls");
-    const int menuSize = 6;
-    string menu[] = { "Xu ly dat ve", "Xu ly tra ve", "Thong ke", "Them may bay", "Quay ve Menu thuong", "Thoat" };
+    const int menuSize = 7;
+    string menu[] = { "Xu ly dat ve", "Xu ly tra ve", "Thong ke", "Them thong tin may bay", "Them thong tin chuyen bay", "Quay ve Menu thuong", "Thoat" };
     int verticalPadding = (screenHeight - menuSize) / 2;
     // In ra các dòng trống để đưa menu xuống giữa màn hình theo chiều dọc
     for (int i = 0; i < verticalPadding; i++) {
@@ -99,7 +100,7 @@ void Screen()
                 ScreenAdmin();
                 return;
             case 3:
-                cout << "Ban da chon chuc nang 4" << endl;
+               
                 break;
             case 4:
                 cout << "ban da chon chuc nang 5" << endl;
@@ -156,9 +157,15 @@ void ScreenAdmin()
                 Airplane::saveAirplanesToFile(danhSachMayBay);
                 break;
             case 4:
+                setTextColor(14);
+                cout << "Moi ban them chuyen bay: " << endl;
+                setTextColor(7);
+                Flight::saveFlightsToFile(danhSachChuyenBay, danhSachMayBay);
+                break;
+            case 5:
                 Screen();
                 return;
-            case 5:
+            case 6:
                 cout << "Thoat chuong trinh thanh cong." << endl;
                 return;
             }

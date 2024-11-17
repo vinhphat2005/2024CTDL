@@ -1,7 +1,9 @@
-
-#ifndef FLIGHT_H
-#define FLIGHT_H
+#pragma once
 #include <string>
+#include <vector>
+#include <unordered_map>
+#include "Airplane.h"
+#include "Ticket.h"
 using namespace std;
 class Flight // luu o file ChuyenBay.txt
 {
@@ -11,9 +13,13 @@ private:
     string airplaneID;
     string destination;
     int status; // 0 -> cancel, 1 -> con cho, 2 -> full, 3 -> hoan tat
+    vector<int> availableSeats;
+    vector<Ticket> TicketList;
 public:
-    Flight(string fID, string date, string aID, string des, int sta);
-    void inputFlight();
-};
+    Flight();
+    Flight(const string& flightID, const string& departureDate, const string& airplaneID, const string& destination);
+    void inputFlight(const vector<Airplane>& danhSachMayBay);
+    void displayflight() const;
 
-#endif  
+    static void saveFlightsToFile(vector<Flight>& danhSachChuyenBay, const vector<Airplane>& danhSachMayBay);
+};

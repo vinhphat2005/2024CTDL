@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ChuyenBay.txt" />
+    <Text Include="KhachHang.txt" />
     <Text Include="MayBay.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

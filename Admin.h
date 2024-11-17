@@ -1,5 +1,4 @@
-#ifndef ADMIN_H
-#define ADMIN_H
+#pragma once
 #include <string>
 #include <fstream>
 using namespace std;
@@ -15,4 +14,3 @@ public:
     void displayAdmin();
     void saveAdmin(ofstream& file) const;
 };
-#endif

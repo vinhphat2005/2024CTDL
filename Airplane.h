@@ -1,5 +1,4 @@
-#ifndef AIRPLANE_H
-#define AIRPLANE_H
+#pragma once
 #include <string>
 #include <vector>
 using namespace std;
@@ -12,10 +11,10 @@ private:
 public:
     Airplane();
     Airplane(string aID, int seat);
+    int getSeatCount() const;
+    string getAirplaneID() const;
     void inputAirplane();
     void displayAirplane() const;
     static void saveAirplanesToFile(vector<Airplane>& danhSachMayBay);
     static void loadAirplanesFromFile(vector<Airplane>& danhSachMayBay);
 };
-
-#endif

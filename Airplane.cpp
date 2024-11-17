@@ -2,12 +2,22 @@
 #include "Utilities.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 string Airplane::filename = "MayBay.txt";
 Airplane::Airplane() : airplaneID(""), seatCount(0) {}
 
 Airplane::Airplane(string aID, int seat) : airplaneID(aID), seatCount(seat) {}
 
+int Airplane::getSeatCount() const
+{
+    return seatCount;
+}
+
+string Airplane::getAirplaneID() const
+{
+    return airplaneID;
+}
 
 void Airplane::inputAirplane() 
 {

@@ -1,15 +1,14 @@
-#ifndef CUSTOMER_H
-#define CUSTOMER_H
+#pragma once
 #include <string>
 using namespace std;
 
 class Customer // luu KhachHang.txt
 {
 private:
-    int customerID;
-    string CMND;
-    string name;
+    int number;
+    string customerID;
+    string customerName;
 public:
-    Customer(int id, string cmnd, string n);
+    Customer(int num, string cmnd, string n);
 };
-#endif
+

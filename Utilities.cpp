@@ -4,6 +4,22 @@
 #include <iomanip>
 #include <windows.h>
 #include <conio.h>
+#include <fstream>
+#include <sstream>
+bool isLeapYear(int year)
+{
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+bool isValidDate(int day, int month, int year)
+{
+    if (month < 1 || month > 12) return false;
+    if (day < 1) return false;
+    int daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    if (month == 2 && isLeapYear(year))
+        return day <= 29;
+
+    return day <= daysInMonth[month - 1];
+}
 using namespace std;
 void setTextColor(int color) 
 {
@@ -72,4 +88,28 @@ void printAdminTitle(int screenWidth)
     centerText("|__|__||_____||___|___||____||__|__|", screenWidth);
     cout << endl;
     setTextColor(7);
+}
+int findAirplaneID(const string& airplaneIDToFind)
+{
+    ifstream inFile("MayBay.txt");
+    if (!inFile.is_open()) {
+        cerr << "Error: Khong the mo file MayBay.txt!" << endl;
+        return 1;
+    }
+    string line;
+    string airplaneID;
+    int seatCount = 0;
+    bool found = false;
+
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        ss >> airplaneID >> seatCount;
+
+        if (airplaneID == airplaneIDToFind) {
+            return seatCount;
+            inFile.close();
+        }
+    }
+    inFile.close();
+    return 1;
 }

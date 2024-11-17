@@ -1,3 +1,3 @@
 #include "Customer.h"
 
-Customer::Customer(int id, string cmnd, string n) : customerID(id = 0), CMND(cmnd), name(n) {}
+Customer::Customer(int num, string cmnd, string n) : number(num = 0), customerID(cmnd), customerName(n) {}
