@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <fstream>
 #include <sstream>
+#include <vector>
 bool isLeapYear(int year)
 {
     return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
@@ -89,7 +90,7 @@ void printAdminTitle(int screenWidth)
     cout << endl;
     setTextColor(7);
 }
-int findAirplaneID(const string& airplaneIDToFind)
+int findSeatCount(const string& airplaneIDToFind)
 {
     ifstream inFile("MayBay.txt");
     if (!inFile.is_open()) {

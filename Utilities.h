@@ -10,4 +10,4 @@ void hideCursor();
 void centerText(const string& text, int width);
 void printTitle(int screenWidth);
 void printAdminTitle(int screenWidth);
-int findAirplaneID(const string& airplaneIDToFind);
+int findSeatCount(const string& airplaneIDToFind);

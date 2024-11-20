@@ -5,6 +5,7 @@
 #include <regex>
 #include <iomanip>
 using namespace std;
+//constructor
 Ticket::Ticket() : ticketID(""), flightID(""), customerID(""), customerName(""), seatNumber(0) {}
 Ticket::Ticket(const string& fID, const string& cID, const string& cName, int seat)
     : flightID(fID), customerID(cID), customerName(cName), seatNumber(seat) {

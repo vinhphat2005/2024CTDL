@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <windows.h>
 #include <conio.h>
+#include <vector>
 using namespace std;
 vector<Airplane> danhSachMayBay;
 vector<Flight> danhSachChuyenBay;
@@ -91,7 +92,7 @@ void Screen()
             switch (currentOption)
             {
             case 0:
-                Airplane::loadAirplanesFromFile(danhSachMayBay);
+                Flight::loadFlightFromFile(danhSachChuyenBay);
                 break;
             case 1:
                 cout << "Chuan bi dat ve" << endl;
