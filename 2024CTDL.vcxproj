@@ -19,15 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Admin.h" />
-    <ClInclude Include="Airplane.h" />
-    <ClInclude Include="Customer.h" />
-    <ClInclude Include="Flight.h" />
-    <ClInclude Include="Screen.h" />
-    <ClInclude Include="Ticket.h" />
-    <ClInclude Include="Utilities.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="Airplane.cpp" />
     <ClCompile Include="Customer.cpp" />
@@ -38,9 +29,13 @@
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ChuyenBay.txt" />
-    <Text Include="KhachHang.txt" />
-    <Text Include="MayBay.txt" />
+    <ClInclude Include="HeaderFiles\Admin.h" />
+    <ClInclude Include="HeaderFiles\Airplane.h" />
+    <ClInclude Include="HeaderFiles\Customer.h" />
+    <ClInclude Include="HeaderFiles\Flight.h" />
+    <ClInclude Include="HeaderFiles\Screen.h" />
+    <ClInclude Include="HeaderFiles\Ticket.h" />
+    <ClInclude Include="HeaderFiles\Utilities.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

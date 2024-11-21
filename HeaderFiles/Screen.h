@@ -2,6 +2,7 @@
 #include "Utilities.h"
 #include "Airplane.h"
 #include "Flight.h"
+#include "Ticket.h"
 void Menu(int currentOption);
 void MenuAdmin(int currentOption);
 void Screen();

@@ -1,4 +1,4 @@
-﻿#include "Screen.h"
+﻿#include "HeaderFiles/Screen.h"
 #include <iostream>
 #include <iomanip>
 #include <windows.h>
@@ -92,10 +92,24 @@ void Screen()
             switch (currentOption)
             {
             case 0:
-                Flight::loadFlightFromFile(danhSachChuyenBay);
+                Flight::loadFlightFromFile(danhSachChuyenBay);     
+                if (danhSachChuyenBay.empty())
+                {
+                    setTextColor(14);
+                    cout << "Hien tai khong co chuyen bay nao." << endl;
+                    setTextColor(7);
+                    return;
+                }
+                setTextColor(14);
+                cout << "Hien thi danh sach cac chuyen bay:" << endl;
+                setTextColor(7);
+                for (const auto& flight : danhSachChuyenBay)
+                {
+                    flight.displayflight();
+                }
                 break;
             case 1:
-                cout << "Chuan bi dat ve" << endl;
+                Ticket::saveTicketToFile();
                 break;
             case 2:
                 ScreenAdmin();

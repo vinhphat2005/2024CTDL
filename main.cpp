@@ -1,9 +1,5 @@
-#include "Admin.h"
-#include "Airplane.h"
-#include "Customer.h"
-#include "Flight.h"
-#include "Ticket.h"
-#include "Screen.h"
+
+#include "HeaderFiles/Screen.h"
 using namespace std;
 int main()
 {

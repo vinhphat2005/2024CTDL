@@ -1,10 +1,10 @@
-#include "Airplane.h"
-#include "Utilities.h"
+#include "HeaderFiles/Airplane.h"
+#include "HeaderFiles/Utilities.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
-string Airplane::filename = "MayBay.txt";
+string Airplane::filename = "TextFiles/MayBay.txt";
 Airplane::Airplane() : airplaneID(""), seatCount(0) {}
 
 Airplane::Airplane(string aID, int seat) : airplaneID(aID), seatCount(seat) {}
@@ -74,7 +74,8 @@ void Airplane::saveAirplanesToFile(vector<Airplane>& danhSachMayBay)
 void Airplane::loadAirplanesFromFile(vector<Airplane>& danhSachMayBay) 
 {
     ifstream fileIn(Airplane::filename);
-    if (!fileIn.is_open()) {
+    if (!fileIn.is_open()) 
+    {
         cerr << "Khong mo duoc file: " << Airplane::filename << endl;
         perror("File mo da bi loi ");
         return;
@@ -82,20 +83,14 @@ void Airplane::loadAirplanesFromFile(vector<Airplane>& danhSachMayBay)
     danhSachMayBay.clear();
     string id;
     int seats;
-    while (fileIn >> id >> seats) {
+    while (fileIn >> id >> seats) 
+    {
         danhSachMayBay.emplace_back(id, seats);
     }
     if (danhSachMayBay.empty())
     {
         cout << "Hien tai khong co may bay nao." << endl;
         return;
-    }
-    setTextColor(14);
-    cout << "Hien thi danh sach cac chuyen bay: " << endl;
-    setTextColor(7);
-    for (const auto& airplane : danhSachMayBay)
-    {
-        airplane.displayAirplane();
     }
     fileIn.close();
 }

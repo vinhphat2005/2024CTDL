@@ -1,4 +1,4 @@
-#include "Admin.h"
+#include "HeaderFiles/Admin.h"
 
 void Admin::inputAdmin() { /* ... */ }
 void Admin::displayAdmin() { /* ... */ }
