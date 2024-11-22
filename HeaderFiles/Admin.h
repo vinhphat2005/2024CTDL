@@ -8,9 +8,7 @@ private:
     string username;
     string password;
 public:
-    Admin() {}
+    Admin();
     Admin(string user, string pass);
-    void inputAdmin();
-    void displayAdmin();
-    void saveAdmin(ofstream& file) const;
+    static bool loginAdmin();
 };

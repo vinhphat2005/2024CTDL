@@ -18,12 +18,15 @@ void Menu(int currentOption)
     string menu[] = { "Hien thi danh sach cac chuyen bay", "Dat ve", "Quan ly", "chuc nang 4", "chuc nang 5", "Thoat" };
     int verticalPadding = (screenHeight - menuSize) / 2;
     // In ra các dòng trống để đưa menu xuống giữa màn hình theo chiều dọc
-    for (int i = 0; i < verticalPadding; i++) {
+    for (int i = 0; i < verticalPadding; i++) 
+    {
         cout << endl;
     }
     printTitle(screenWidth);
-    for (int i = 0; i < menuSize; i++) {
-        if (i == currentOption) {
+    for (int i = 0; i < menuSize; i++) 
+    {
+        if (i == currentOption) 
+        {
             setTextColor(12);
             centerText("> " + menu[i] + " <", screenWidth);
         }
@@ -45,11 +48,13 @@ void MenuAdmin(int currentOption)
     string menu[] = { "Xu ly dat ve", "Xu ly tra ve", "Thong ke", "Them thong tin may bay", "Them thong tin chuyen bay", "Quay ve Menu thuong", "Thoat" };
     int verticalPadding = (screenHeight - menuSize) / 2;
     // In ra các dòng trống để đưa menu xuống giữa màn hình theo chiều dọc
-    for (int i = 0; i < verticalPadding; i++) {
+    for (int i = 0; i < verticalPadding; i++) 
+    {
         cout << endl;
     }
     printAdminTitle(screenWidth);
-    for (int i = 0; i < menuSize; i++) {
+    for (int i = 0; i < menuSize; i++) 
+    {
         if (i == currentOption) {
             setTextColor(12);
             centerText("> " + menu[i] + " <", screenWidth);
@@ -68,26 +73,32 @@ void Screen()
     hideCursor();
     int currentOption = 0;
     char key;
-    while (true) {
+    while (true) 
+    {
         //In ra menu với con trỏ ở vị trí hiện tại
         Menu(currentOption);
         key = _getch();  // Đọc phím nhấn đầu tiên
-        if (key == -32) {
+        if (key == -32) 
+        {
             key = _getch();
             if (key == 72) { // Nhận mũi tên (lên)
                 currentOption--;
-                if (currentOption < 0) {
+                if (currentOption < 0) 
+                {
                     currentOption = 5; // Quay về cuối menu
                 }
             }
-            else if (key == 80) { // Nhận mũi tên xuống
+            else if (key == 80) 
+            { // Nhận mũi tên xuống
                 currentOption++;
-                if (currentOption > 5) {
+                if (currentOption > 5) 
+                {
                     currentOption = 0; // Quay về đầu menu
                 }
             }
         }
-        else if (key == 13) {
+        else if (key == 13) 
+        {
             system("cls");
             switch (currentOption)
             {
@@ -112,7 +123,11 @@ void Screen()
                 Ticket::saveTicketToFile();
                 break;
             case 2:
-                ScreenAdmin();
+                /*ScreenAdmin();*/
+                if (Admin::loginAdmin())
+                {
+                    ScreenAdmin();
+                }
                 return;
             case 3:
                
@@ -137,22 +152,28 @@ void ScreenAdmin()
         //In ra menu với con trỏ ở vị trí hiện tại
         MenuAdmin(currentOption);
         key = _getch();  // Đọc phím nhấn đầu tiên
-        if (key == -32) {
+        if (key == -32) 
+        {
             key = _getch();
-            if (key == 72) { // Nhận mũi tên (lên)
+            if (key == 72) 
+            { // Nhận mũi tên (lên)
                 currentOption--;
-                if (currentOption < 0) {
+                if (currentOption < 0) 
+                {
                     currentOption = 6; // Quay về cuối menu
                 }
             }
-            else if (key == 80) { // Nhận mũi tên xuống
+            else if (key == 80) 
+            { // Nhận mũi tên xuống
                 currentOption++;
-                if (currentOption > 6) {
+                if (currentOption > 6) 
+                {
                     currentOption = 0; // Quay về đầu menu
                 }
             }
         }
-        else if (key == 13) {
+        else if (key == 13) 
+        {
             system("cls");
             switch (currentOption)
             {
@@ -175,7 +196,7 @@ void ScreenAdmin()
                 setTextColor(14);
                 cout << "Moi ban them chuyen bay: " << endl;
                 setTextColor(7);
-                Flight::saveFlightsToFile(danhSachChuyenBay, danhSachMayBay);
+                Flight::saveFlightsToFile(danhSachMayBay);
                 break;
             case 5:
                 Screen();
@@ -188,4 +209,33 @@ void ScreenAdmin()
             system("pause");
         }
     }
+}
+
+void ScreenLogin()
+{
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    int screenWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    int screenHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+    system("cls");
+    const int menuSize = 6;
+    int verticalPadding = (screenHeight - menuSize) / 2;
+    for (int i = 0; i < verticalPadding; i++)
+    {
+        cout << endl;
+    }
+    // menu hien thi
+    setTextColor(14);
+    centerText("****************************************", screenWidth);
+    int textWidth = 40;
+    int padding = (screenWidth - textWidth) / 2;
+    cout << string(padding, ' ');
+    setTextColor(14);
+    cout << "*";
+    setTextColor(2);
+    cout << "          DANG NHAP HE THONG          ";
+
+    setTextColor(14);
+    cout << "*" << endl;
+    centerText("****************************************", screenWidth);
 }

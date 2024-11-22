@@ -20,7 +20,7 @@ public:
     Flight(const string& flightID, const string& departureDate, const string& airplaneID, const string& destination, int status, int seatCount);
     void inputFlight(vector<Airplane>& danhSachMayBay);
     void displayflight() const;
-    static void saveFlightsToFile(vector<Flight>& danhSachChuyenBay, vector<Airplane>& danhSachMayBay);
+    static void saveFlightsToFile(vector<Airplane>& danhSachMayBay);
     static void loadFlightFromFile(vector<Flight>& danhSachChuyenBay);
     /*void bookSeat(Flight& tempFlight, int seat);*/
 };

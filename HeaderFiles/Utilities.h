@@ -11,3 +11,4 @@ void centerText(const string& text, int width);
 void printTitle(int screenWidth);
 void printAdminTitle(int screenWidth);
 int findSeatCount(const string& airplaneIDToFind);
+void useVerticalPadding(int VerticalPadding);

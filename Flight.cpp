@@ -122,7 +122,7 @@ void Flight::displayflight() const
 }
 
 //doc du lieu tu danh sach chuyen bay do nguoi dung` nhap thong qua inputflight va bo vao file ChuyenBay.txt
-void Flight::saveFlightsToFile(vector<Flight>& danhSachChuyenBay, vector<Airplane>& danhSachMayBay)
+void Flight::saveFlightsToFile(vector<Airplane>& danhSachMayBay)
 {
     ofstream outFile("TextFiles/ChuyenBay.txt", ios::app);
     if (!outFile.is_open()) {
@@ -139,7 +139,7 @@ void Flight::saveFlightsToFile(vector<Flight>& danhSachChuyenBay, vector<Airplan
             cout << "so luong nhap khong hop le. vui long nhap lai!" << endl;
         }
     } while (soluongchuyenbay <= 0);
-    //Su dung input de moi` nguoi dung nhap
+    //Su dung input de moi` nguoi dung nhap va dua vao file
     for (int i = 0; i < soluongchuyenbay; i++)
     {
         Flight newFlight;
@@ -147,13 +147,9 @@ void Flight::saveFlightsToFile(vector<Flight>& danhSachChuyenBay, vector<Airplan
         cout << "Nhap chuyen bay thu " << i + 1 << ": \n";
         setTextColor(7);
         newFlight.inputFlight(danhSachMayBay);
-        danhSachChuyenBay.push_back(newFlight);
-    }
-    //dua vao file
-    for (auto& flight : danhSachChuyenBay)
-    {
-        int tempSeatCount = findSeatCount(flight.airplaneID);
-        outFile << flight.flightID << " " << flight.departureDate << " " << flight.airplaneID << " " << flight.destination << " " << flight.status << " " << tempSeatCount << endl;
+        int tempSeatCount = findSeatCount(newFlight.airplaneID);
+        outFile << newFlight.flightID << " " << newFlight.departureDate << " " << newFlight.airplaneID << " " << newFlight.destination << " " 
+            << newFlight.status << " " << tempSeatCount << endl;
     }
     outFile.close();
     cout << "da luu chuyen bay thanh cong." << endl;

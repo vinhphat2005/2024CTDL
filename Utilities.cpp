@@ -36,7 +36,7 @@ void setWindowSize()
     short winHeight = scrBufferInfo.srWindow.Bottom - scrBufferInfo.srWindow.Top + 1;
     short scrBufferWidth = scrBufferInfo.dwSize.X;
     // xoá thanh cuộn (chiều cao buffer = window)
-    COORD newSize;
+    COORD newSize = { 0, 0 };
     newSize.X = scrBufferWidth;
     newSize.Y = winHeight;
     SetConsoleScreenBufferSize(hOut, newSize);
@@ -113,4 +113,11 @@ int findSeatCount(const string& airplaneIDToFind)
     }
     inFile.close();
     return 1;
+}
+void useVerticalPadding(int VerticalPadding)
+{
+    for (int i = 0; i < VerticalPadding; i++)
+    {
+        cout << endl;
+    }
 }
