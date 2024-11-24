@@ -68,14 +68,15 @@ void centerText(const string& text, int width)
 void printTitle(int screenWidth)
 {
     setTextColor(14);
-    centerText("________                         .__              _____                  __________               ", screenWidth);
-    centerText("\\_____  \\  __ _______    ____    |  | ___.__.    /     \\ _____  ___.__.  \\______   \\_____  ___.__.", screenWidth);
-    centerText(" /  / \\  \\|  |  \\__  \\  /    \\   |  |<   |  |   /  \\ /  \\\\__  \\<   |  |   |    |  _/\\__  \\<   |  |", screenWidth);
-    centerText("/   \\_/.  \\  |  // __ \\|   |  \\  |  |_\\___  |  /    Y    \\/ __ \\\\___  |   |    |   \\ / __ \\\\___  |", screenWidth);
-    centerText("\\_____\\ \\_/____/(____  /___|  /  |____/ ____|  \\____|__  (____  / ____|   |______  /(____  / ____|", screenWidth);
-    centerText("      \\__>          \\/     \\/        \\/               \\/     \\/\\/               \\/      \\/\\/     ", screenWidth);
+    centerText("________                        .____             _________ .__                                 __________                ", screenWidth);
+    centerText("\\_____  \\  __ _______    ____   |    |    ___.__. \\_   ___ \\|  |__  __ __ ___.__. ____   ____   \\______   \\_____  ___.__.", screenWidth);
+    centerText(" /  / \\  \\|  |  \\__  \\  /    \\  |    |   <   |  | /    \\  \\/|  |  \\|  |  <   |  |/ __ \\ /    \\   |    |  _/\\__  \\<   |  |", screenWidth);
+    centerText("/   \\_/.  \\  |  // __ \\|   |  \\ |    |___ \\___  | \\     \\___|   Y  \\  |  /\\___  \\  ___/|   |  \\  |    |   \\ / __ \\\\___  |", screenWidth);
+    centerText("\\_____\\ \\_/____/(____  /___|  / |_______ \\/ ____|  \\______  /___|  /____/ / ____|\\___  >___|  /  |______  /(____  / ____|", screenWidth);
+    centerText("       \\__>          \\/     \\/          \\/\\/              \\/     \\/       \\/         \\/     \\/          \\/      \\/\\/    ", screenWidth);
     setTextColor(7);
 }
+
 void printAdminTitle(int screenWidth) 
 {
     setTextColor(14);

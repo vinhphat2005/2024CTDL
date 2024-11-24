@@ -88,6 +88,7 @@ void Ticket::inputTicket()
             setTextColor(7);
         }
     } while (customerName.empty() || customerName.find_first_not_of(" \t") == string::npos);
+    Flight::addTicketToTicketList(flightID, ticketID);
 }
 
 
@@ -147,7 +148,6 @@ void Ticket::saveTicketToFile()
             << newTicket.flightID << " "
             << newTicket.seatNumber << "\n";
         outFile.close();
-        
         setTextColor(15);
         cout << "Da luu ve vao file " << filename << " thanh cong.\n";
         setTextColor(7);
