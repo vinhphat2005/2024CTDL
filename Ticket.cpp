@@ -88,7 +88,7 @@ void Ticket::inputTicket()
             setTextColor(7);
         }
     } while (customerName.empty() || customerName.find_first_not_of(" \t") == string::npos);
-    Flight::addTicketToTicketList(flightID, ticketID);
+    Flight::addTicketToTicketList(flightID, ticketID, "TextFiles/ChuyenBay.txt");
 }
 
 
