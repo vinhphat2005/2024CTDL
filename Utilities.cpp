@@ -92,7 +92,7 @@ void printAdminTitle(int screenWidth)
 }
 int findSeatCount(const string& airplaneIDToFind)
 {
-    ifstream inFile("MayBay.txt");
+    ifstream inFile("TextFiles/MayBay.txt");
     if (!inFile.is_open()) {
         cerr << "Error: Khong the mo file MayBay.txt!" << endl;
         return 1;

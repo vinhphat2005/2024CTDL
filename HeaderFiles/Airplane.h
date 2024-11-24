@@ -7,7 +7,6 @@ class Airplane // luu o file MayBay.txt
 private:
     string airplaneID;
     int seatCount;
-    static string filename;
 public:
     Airplane();
     Airplane(string aID, int seat);

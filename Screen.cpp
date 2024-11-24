@@ -196,7 +196,7 @@ void ScreenAdmin()
                 setTextColor(14);
                 cout << "Moi ban them chuyen bay: " << endl;
                 setTextColor(7);
-                Flight::saveFlightsToFile(danhSachMayBay);
+                Flight::saveFlightsToFile(danhSachMayBay, danhSachChuyenBay);
                 break;
             case 5:
                 Screen();

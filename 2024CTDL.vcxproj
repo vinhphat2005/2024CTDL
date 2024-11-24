@@ -37,15 +37,12 @@
     <ClInclude Include="HeaderFiles\Ticket.h" />
     <ClInclude Include="HeaderFiles\Utilities.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="TextFiles\Admin.txt" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{1167e9f8-2723-4160-b93d-ec52e28221d2}</ProjectGuid>
     <RootNamespace>My2024CTDL</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.20348.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

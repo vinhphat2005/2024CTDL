@@ -1,7 +1,7 @@
 #include "HeaderFiles/Screen.h"
 #include <conio.h>
 #include <iostream>
-#include <Windows.h>
+#include <windows.h>
 #include <iomanip>
 using namespace std;
 Admin::Admin() {}
@@ -100,8 +100,19 @@ bool Admin::loginAdmin()
                     continue;
                 }
             }
-            passInput += ch; // them ky tu vao chuoi pass
-            cout << '*';
+            else if (ch == '\b')
+            {
+                if (!passInput.empty())
+                {
+                    passInput.pop_back(); 
+                    cout << "\b \b";    
+                }
+            }
+            else
+            {
+                passInput += ch; 
+                cout << '*';     
+            }
         }
         cout << endl;
 

@@ -32,13 +32,14 @@ void Ticket::inputTicket()
 
         if (flightID.empty() || flightID.find_first_not_of(" \t") == string::npos)
         {
+            setTextColor(12);
             cout << "Ma chuyen bay khong duoc de trong hoac chi chua khoang trang!" << endl;
+            setTextColor(7);
             continue; 
         }
         //kiem tra ma chuyen bay
         if (!Flight::checkStatus(flightID))
         {
-           
             continue;
         }
         break;
@@ -52,19 +53,14 @@ void Ticket::inputTicket()
         getline(cin, seatNumberInput);
         if (seatNumberInput.empty() || seatNumberInput.find_first_not_of("0123456789") != string::npos)
         {
+            setTextColor(12);
             cout << "Thu tu ghe khong hop le. Vui long nhap mot so nguyen duong khong co khoang trang!" << endl;
+            setTextColor(7);
             continue; 
         }
         seatNumber = stoi(seatNumberInput);
-
-        if (seatNumber <= 0)
-        {
-            cout << "Thu tu ghe phai lon hon 0. Vui long nhap lai!" << endl;
-            continue; 
-        }
         if (!Flight::bookSeat(seatNumber, flightID))
         {
-            cout << "So ghe nay da duoc dat hoac khong hop le. Vui long nhap lai!" << endl;
             continue; 
         }
         break;
@@ -77,7 +73,9 @@ void Ticket::inputTicket()
         getline(cin, customerID);
         if (!isValidInput(customerID))
         {
+            setTextColor(12);
             cout << "CMND khong hop le. Vui long chi nhap ky tu va so!" << endl;
+            setTextColor(7);
         }
     } while (customerID.empty() || isValidInput(customerID) == false);
     do
@@ -85,7 +83,9 @@ void Ticket::inputTicket()
         cout << "Nhap ho ten khach hang: ";
         getline(cin, customerName);
         if (customerName.empty() || customerName.find_first_not_of(" \t") == string::npos) {
+            setTextColor(12);
             cout << "Ho ten khong duoc de trong hoac chi chua khoang trang!" << endl;
+            setTextColor(7);
         }
     } while (customerName.empty() || customerName.find_first_not_of(" \t") == string::npos);
 }
@@ -114,12 +114,16 @@ void Ticket::saveTicketToFile()
     int soluongve;
     do
     {
+        setTextColor(11);
         cout << "hay nhap so luong ve muon dat (phai lon hon 0): ";
+        setTextColor(7);
         cin >> soluongve;
         cin.ignore();
         if (soluongve <= 0)
         {
+            setTextColor(12);
             cout << "so luong nhap khong hop le. vui long nhap lai!" << endl;
+            setTextColor(7);
         }
     } while (soluongve <= 0);
     for (int i = 0; i < soluongve; i++)
@@ -143,6 +147,9 @@ void Ticket::saveTicketToFile()
             << newTicket.flightID << " "
             << newTicket.seatNumber << "\n";
         outFile.close();
+        
+        setTextColor(15);
         cout << "Da luu ve vao file " << filename << " thanh cong.\n";
+        setTextColor(7);
     }
 }

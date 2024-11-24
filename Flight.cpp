@@ -17,21 +17,39 @@ Flight::Flight(const string& flightID, const string& departureDate, const string
     this->status = status;
     if (seatCount != 0) 
     {
-        for (int i = 0; i < seatCount; i++)
-        {
-            availableSeats.push_back(i);
-        }
+        availableSeats.resize(seatCount, 1);
     }
 }
 
 //input
-void Flight::inputFlight(vector<Airplane>& danhSachMayBay)
+void Flight::inputFlight(vector<Airplane>& danhSachMayBay, const vector<Flight>& danhSachChuyenBay)
 {
-    //Nhap Flight ID
-    cout << "Nhap ma chuyen bay: ";
-    cin >> flightID;
-    cin.ignore();
-    
+    while (true)
+    {
+        cout << "Nhap ma chuyen bay: ";
+        cin >> flightID;
+        cin.ignore();
+        bool isDuplicate = false;
+        for (const auto& flight : danhSachChuyenBay)
+        {
+            if (flight.flightID == flightID)
+            {
+                isDuplicate = true;
+                break;
+            }
+        }
+
+        if (isDuplicate)
+        {
+            setTextColor(12);
+            cout << "Ma chuyen bay da ton tai. Vui long nhap ma khac!" << endl;
+            setTextColor(7);
+        }
+        else
+        {
+            break;
+        }
+    }
     //Nhap Date
     int day, month, year;
     while (true)
@@ -49,7 +67,9 @@ void Flight::inputFlight(vector<Airplane>& danhSachMayBay)
         }
         else
         {
+            setTextColor(12);
             cout << "Ngay thang nam khong hop le, vui long nhap lai!" << endl;
+            setTextColor(7);
         }
     }
 
@@ -59,7 +79,6 @@ void Flight::inputFlight(vector<Airplane>& danhSachMayBay)
         cout << "Nhap ma may bay: ";
         cin >> airplaneID;
         cin.ignore();
-
         // Kiem tra airplaneID co ton tai khong
         bool found = false;
         Airplane::loadAirplanesFromFile(danhSachMayBay);
@@ -77,7 +96,9 @@ void Flight::inputFlight(vector<Airplane>& danhSachMayBay)
         }
         else
         {
+            setTextColor(12);
             cout << "Ma may bay khong ton tai trong danh sach, vui long nhap lai!" << endl;
+            setTextColor(7);
         }
     }
     //Nhap Destination
@@ -91,7 +112,9 @@ void Flight::inputFlight(vector<Airplane>& danhSachMayBay)
         cin >> status;
         if (cin.fail() || status < 0 || status > 3)
         {
+            setTextColor(12);
             cout << "Status khong hop le, vui long nhap lai." << endl;
+            setTextColor(7);
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
@@ -119,10 +142,15 @@ void Flight::displayflight() const
     default: cout << "khong xac dinh"; break;
     }
     cout << "\nSo ghe: " << availableSeats.size() << "\n";
+    cout << "Danh sach ve: \n";
+    for (const auto& v : TicketList)
+    {
+        cout << v << endl;
+    }
 }
 
 //doc du lieu tu danh sach chuyen bay do nguoi dung` nhap thong qua inputflight va bo vao file ChuyenBay.txt
-void Flight::saveFlightsToFile(vector<Airplane>& danhSachMayBay)
+void Flight::saveFlightsToFile(vector<Airplane>& danhSachMayBay, const vector<Flight>& danhSachChuyenBay)
 {
     ofstream outFile("TextFiles/ChuyenBay.txt", ios::app);
     if (!outFile.is_open()) {
@@ -132,11 +160,15 @@ void Flight::saveFlightsToFile(vector<Airplane>& danhSachMayBay)
     int soluongchuyenbay;
     do
     {
+        setTextColor(11);
         cout << "hay nhap so luong chuyen bay ma ban muon them (phai lon hon 0): ";
+        setTextColor(7);
         cin >> soluongchuyenbay;
         if (soluongchuyenbay <= 0)
         {
+            setTextColor(12);
             cout << "so luong nhap khong hop le. vui long nhap lai!" << endl;
+            setTextColor(7);
         }
     } while (soluongchuyenbay <= 0);
     //Su dung input de moi` nguoi dung nhap va dua vao file
@@ -146,13 +178,15 @@ void Flight::saveFlightsToFile(vector<Airplane>& danhSachMayBay)
         setTextColor(14);
         cout << "Nhap chuyen bay thu " << i + 1 << ": \n";
         setTextColor(7);
-        newFlight.inputFlight(danhSachMayBay);
+        newFlight.inputFlight(danhSachMayBay, danhSachChuyenBay);
         int tempSeatCount = findSeatCount(newFlight.airplaneID);
         outFile << newFlight.flightID << " " << newFlight.departureDate << " " << newFlight.airplaneID << " " << newFlight.destination << " " 
             << newFlight.status << " " << tempSeatCount << endl;
     }
     outFile.close();
+    setTextColor(15);
     cout << "da luu chuyen bay thanh cong." << endl;
+    setTextColor(7);
 }
 
 //doc file tu file ChuyenBay.txt 
@@ -207,15 +241,21 @@ bool Flight::checkStatus(const string& _flightID)
             switch (flight.status)
             {
             case 0: 
+                setTextColor(12);
                 cout << "Chuyen bay da bi huy, khong the dat ve\n";
+                setTextColor(7);
                 return false;
 
             case 2: 
+                setTextColor(12);
                 cout << "Chuyen bay da het ve, khong the dat ve\n";
+                setTextColor(7);
                 return false;
 
             case 3: 
+                setTextColor(12);
                 cout << "Chuyen bay da hoan tat, khong the dat ve\n";
+                setTextColor(7);
                 return false;
 
             default: 
@@ -223,27 +263,57 @@ bool Flight::checkStatus(const string& _flightID)
             }
         }
     }
+    setTextColor(12);
     cout << "Khong co ma chuyen bay nay, xin moi nhap lai\n";
+    setTextColor(7);
     return false;
 }
 bool Flight::bookSeat(int seat, const string& _flightID)
 {
     vector<Flight> tempFlight;
     loadFlightFromFile(tempFlight);
+
     for (auto& flight : tempFlight)
     {
         if (flight.flightID == _flightID)
         {
-            if (flight.availableSeats[seat] == 0)
+            if (seat <= 0 || seat > flight.availableSeats.size())
             {
+                setTextColor(12);
+                cout << "Thu tu ghe khong hop le. Vui long nhap lai!\n";
+                setTextColor(7);
                 return false;
             }
-            else
+
+       
+            if (flight.availableSeats[seat - 1] == 0)
             {
-                flight.availableSeats[seat] = 0;
-                return true;
+                setTextColor(11);
+                cout << "Da co nguoi dat ghe, vui long chon ghe khac.\n";
+                setTextColor(7);
+                return false;
             }
+            flight.availableSeats[seat - 1] = 0;
+
+            bool allSeatsBooked = true;
+            for (const auto& s : flight.availableSeats)
+            {
+                if (s != 0)
+                {
+                    allSeatsBooked = false;
+                    break;
+                }
+            }
+            flight.status = allSeatsBooked ? 2 : 1;
+
+            return true;
         }
     }
     return true;
+}
+
+
+void Flight::addTicketToTicketList(const string& flightID)
+{
+
 }
