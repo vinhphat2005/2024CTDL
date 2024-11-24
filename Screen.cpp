@@ -17,7 +17,7 @@ void Menu(int currentOption)
     const int menuSize = 6;
     string menu[] = { "Hien thi danh sach cac chuyen bay", "Dat ve", "Quan ly", "chuc nang 4", "chuc nang 5", "Thoat" };
     int verticalPadding = (screenHeight - menuSize) / 2;
-    // In ra các dòng trống để đưa menu xuống giữa màn hình theo chiều dọc
+   
     for (int i = 0; i < verticalPadding; i++) 
     {
         cout << endl;
@@ -47,7 +47,7 @@ void MenuAdmin(int currentOption)
     const int menuSize = 7;
     string menu[] = { "Xu ly dat ve", "Xu ly tra ve", "Thong ke", "Them thong tin may bay", "Them thong tin chuyen bay", "Quay ve Menu thuong", "Thoat" };
     int verticalPadding = (screenHeight - menuSize) / 2;
-    // In ra các dòng trống để đưa menu xuống giữa màn hình theo chiều dọc
+   
     for (int i = 0; i < verticalPadding; i++) 
     {
         cout << endl;
@@ -75,25 +75,25 @@ void Screen()
     char key;
     while (true) 
     {
-        //In ra menu với con trỏ ở vị trí hiện tại
+       
         Menu(currentOption);
-        key = _getch();  // Đọc phím nhấn đầu tiên
+        key = _getch(); 
         if (key == -32) 
         {
             key = _getch();
-            if (key == 72) { // Nhận mũi tên (lên)
+            if (key == 72) { 
                 currentOption--;
                 if (currentOption < 0) 
                 {
-                    currentOption = 5; // Quay về cuối menu
+                    currentOption = 5;
                 }
             }
             else if (key == 80) 
-            { // Nhận mũi tên xuống
+            { 
                 currentOption++;
                 if (currentOption > 5) 
                 {
-                    currentOption = 0; // Quay về đầu menu
+                    currentOption = 0; 
                 }
             }
         }
@@ -149,26 +149,26 @@ void ScreenAdmin()
     int currentOption = 0;
     char key;
     while (true) {
-        //In ra menu với con trỏ ở vị trí hiện tại
+      
         MenuAdmin(currentOption);
-        key = _getch();  // Đọc phím nhấn đầu tiên
+        key = _getch(); 
         if (key == -32) 
         {
             key = _getch();
             if (key == 72) 
-            { // Nhận mũi tên (lên)
+            { 
                 currentOption--;
                 if (currentOption < 0) 
                 {
-                    currentOption = 6; // Quay về cuối menu
+                    currentOption = 6; 
                 }
             }
             else if (key == 80) 
-            { // Nhận mũi tên xuống
+            { 
                 currentOption++;
                 if (currentOption > 6) 
                 {
-                    currentOption = 0; // Quay về đầu menu
+                    currentOption = 0; 
                 }
             }
         }

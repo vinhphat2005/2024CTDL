@@ -30,17 +30,17 @@ void setTextColor(int color)
 void setWindowSize()
 {
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    // Lấy thông tin bộ đệm của màn hình console
+
     CONSOLE_SCREEN_BUFFER_INFO scrBufferInfo;
     GetConsoleScreenBufferInfo(hOut, &scrBufferInfo);
     short winHeight = scrBufferInfo.srWindow.Bottom - scrBufferInfo.srWindow.Top + 1;
     short scrBufferWidth = scrBufferInfo.dwSize.X;
-    // xoá thanh cuộn (chiều cao buffer = window)
+ 
     COORD newSize = { 0, 0 };
     newSize.X = scrBufferWidth;
     newSize.Y = winHeight;
     SetConsoleScreenBufferSize(hOut, newSize);
-    // Đặt cửa sổ console ở chế độ toàn màn hình
+   
     HWND consoleWindow = GetConsoleWindow();
     ShowWindow(consoleWindow, SW_MAXIMIZE);
 }
@@ -48,16 +48,16 @@ void disableResizeWindow()
 {
     HWND consoleWindow = GetConsoleWindow();
     LONG_PTR style = GetWindowLongPtr(consoleWindow, GWL_STYLE);
-    style &= ~WS_MAXIMIZEBOX; // Tắt nút "Maximize"
-    style &= ~WS_SIZEBOX;     // Vô hiệu hóa thay đổi kích thước
+    style &= ~WS_MAXIMIZEBOX; 
+    style &= ~WS_SIZEBOX;     
     SetWindowLongPtr(consoleWindow, GWL_STYLE, style);
 }
 void hideCursor()
 {
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO cursorInfo;
-    GetConsoleCursorInfo(consoleHandle, &cursorInfo); // bỏ settings của cursor hiện tại vào cursorinfo
-    cursorInfo.bVisible = false; // hide cursor đi
+    GetConsoleCursorInfo(consoleHandle, &cursorInfo); 
+    cursorInfo.bVisible = false; 
     SetConsoleCursorInfo(consoleHandle, &cursorInfo);
 }
 void centerText(const string& text, int width)

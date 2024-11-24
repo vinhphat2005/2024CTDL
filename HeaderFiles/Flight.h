@@ -23,4 +23,6 @@ public:
     static void saveFlightsToFile(vector<Airplane>& danhSachMayBay);
     static void loadFlightFromFile(vector<Flight>& danhSachChuyenBay);
     /*void bookSeat(Flight& tempFlight, int seat);*/
+    static bool checkStatus(const string& _flightID);
+    static bool bookSeat(int seat, const string& _flightID);
 };

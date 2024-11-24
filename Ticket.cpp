@@ -1,4 +1,5 @@
 #include "HeaderFiles/Ticket.h"
+#include "HeaderFiles/Flight.h"
 #include "HeaderFiles/Utilities.h"
 #include <iostream>
 #include <fstream>
@@ -28,34 +29,46 @@ void Ticket::inputTicket()
     {
         cout << "Nhap ma chuyen bay: ";
         getline(cin, flightID);
+
         if (flightID.empty() || flightID.find_first_not_of(" \t") == string::npos)
         {
             cout << "Ma chuyen bay khong duoc de trong hoac chi chua khoang trang!" << endl;
+            continue; 
         }
-    } while (flightID.empty() || flightID.find_first_not_of(" \t") == string::npos);
+        //kiem tra ma chuyen bay
+        if (!Flight::checkStatus(flightID))
+        {
+           
+            continue;
+        }
+        break;
+    } while (true);
+
 
     string seatNumberInput;
     do
     {
-        cout << "Nhap so ghe: ";
+        cout << "Nhap thu tu ghe: ";
         getline(cin, seatNumberInput);
-
-        // kiemtra
         if (seatNumberInput.empty() || seatNumberInput.find_first_not_of("0123456789") != string::npos)
         {
-            cout << "So ghe khong hop le. Vui long nhap mot so nguyen duong khong co khoang trang!" << endl;
+            cout << "Thu tu ghe khong hop le. Vui long nhap mot so nguyen duong khong co khoang trang!" << endl;
+            continue; 
         }
-        else
+        seatNumber = stoi(seatNumberInput);
+
+        if (seatNumber <= 0)
         {
-            // chuyen chuoi thanh` so nguyen
-            seatNumber = stoi(seatNumberInput);
-            if (seatNumber <= 0)
-            {
-                cout << "So ghe phai lon hon 0. Vui long nhap lai!" << endl;
-                seatNumberInput.clear(); // xoa de tiep tuc vong lap
-            }
+            cout << "Thu tu ghe phai lon hon 0. Vui long nhap lai!" << endl;
+            continue; 
         }
-    } while (seatNumberInput.empty() || seatNumberInput.find_first_not_of("0123456789") != string::npos || seatNumber <= 0);
+        if (!Flight::bookSeat(seatNumber, flightID))
+        {
+            cout << "So ghe nay da duoc dat hoac khong hop le. Vui long nhap lai!" << endl;
+            continue; 
+        }
+        break;
+    } while (true);
 
     this->ticketID = generateTicketID();
     do

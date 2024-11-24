@@ -195,3 +195,55 @@ void Flight::loadFlightFromFile(vector<Flight>& danhSachChuyenBay)
     }
     fileIn.close();
 }
+bool Flight::checkStatus(const string& _flightID)
+{
+    vector<Flight> tempFlights;
+    Flight::loadFlightFromFile(tempFlights);
+
+    for (const auto& flight : tempFlights)
+    {
+        if (flight.flightID == _flightID)
+        {
+            switch (flight.status)
+            {
+            case 0: 
+                cout << "Chuyen bay da bi huy, khong the dat ve\n";
+                return false;
+
+            case 2: 
+                cout << "Chuyen bay da het ve, khong the dat ve\n";
+                return false;
+
+            case 3: 
+                cout << "Chuyen bay da hoan tat, khong the dat ve\n";
+                return false;
+
+            default: 
+                return true;
+            }
+        }
+    }
+    cout << "Khong co ma chuyen bay nay, xin moi nhap lai\n";
+    return false;
+}
+bool Flight::bookSeat(int seat, const string& _flightID)
+{
+    vector<Flight> tempFlight;
+    loadFlightFromFile(tempFlight);
+    for (auto& flight : tempFlight)
+    {
+        if (flight.flightID == _flightID)
+        {
+            if (flight.availableSeats[seat] == 0)
+            {
+                return false;
+            }
+            else
+            {
+                flight.availableSeats[seat] = 0;
+                return true;
+            }
+        }
+    }
+    return true;
+}
