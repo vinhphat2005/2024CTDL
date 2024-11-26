@@ -1,4 +1,4 @@
-#include "HeaderFiles/Flight.h"
+﻿#include "HeaderFiles/Flight.h"
 #include "HeaderFiles/Utilities.h"
 #include <iostream>
 #include <vector>
@@ -488,3 +488,150 @@ void Flight::addTicketToTicketList(const string& flightID, const string& ticket,
 }
 
 
+void Flight::bookTicket(const string& flightID, const string& customerID, int seatNumber, const string& customerFile, const string& seatListFile) {
+    vector<string> customerList;
+    string customerInfo;
+    bool customerFound = false;
+
+    // doc va xoa khach hang khoi file khachhang.txt
+    ifstream inFile(customerFile);
+    string line;
+    while (getline(inFile, line)) 
+    {
+        stringstream ss(line);
+        int number;
+        string tempCustomerID, name;
+
+        ss >> number >> tempCustomerID; // doc so thu tu va cmnd
+        getline(ss, name);             // doc ten
+
+        // Loai bo khoang trang dau dong neu co
+        if (!name.empty() && name[0] == ' ')
+            name = name.substr(1);
+
+        if (tempCustomerID == customerID) 
+        {
+            customerFound = true;
+            customerInfo = tempCustomerID + " " + name; // luu thong tin khach hang
+        }
+        else {
+            customerList.push_back(line); // giu lai khach hang khong lien quan
+        }
+    }
+    inFile.close();
+
+    if (!customerFound) 
+    {
+        setTextColor(12);
+        cout << "Khach hang khong co trong hang` cho`!" << endl;
+        setTextColor(7);
+        return;
+    }
+
+    // Ghi lai file khachhang.txt sau khi xoa khach hang trong hang` cho`
+    ofstream outFile(customerFile);
+    for (const string& l : customerList) 
+    {
+        outFile << l << endl;
+    }
+    outFile.close();
+
+    // Doc danh sach ghe trong tu file DanhSachGheTrong.txt
+    vector<string> seatLines;
+    inFile.open(seatListFile);
+    while (getline(inFile, line)) 
+    {
+        seatLines.push_back(line);
+    }
+    inFile.close();
+
+    // cap nhat danh sach ghe trong
+    bool seatUpdated = false;
+    for (string& seatLine : seatLines) 
+    {
+        stringstream ss(seatLine);
+        string tempFlightID;
+        ss >> tempFlightID; // doc flightid trc
+
+        if (tempFlightID == flightID) 
+        {
+            size_t pos = seatLine.find(' ');
+            string seats = seatLine.substr(pos + 1); // bat dau lay danh sach ghe
+            vector<int> seatStatus;
+
+            stringstream seatStream(seats);
+            string seatToken;
+            while (getline(seatStream, seatToken, ',')) 
+            {
+                seatStatus.push_back(stoi(seatToken)); // dua no vao vector
+            }
+
+            if (seatNumber < 1 || seatNumber > seatStatus.size() || seatStatus[seatNumber - 1] == 1) 
+            {
+                cout << "Ghế đã được đặt hoặc không tồn tại!" << endl;
+                return;
+            }
+
+            //danh dau ghe' da check tu 0 -> 1
+            seatStatus[seatNumber - 1] = 1;
+
+            // Ghi lai danh sach ghe
+            seatLine = flightID + " ";
+            for (size_t i = 0; i < seatStatus.size(); ++i) {
+                seatLine += to_string(seatStatus[i]);
+                if (i != seatStatus.size() - 1) {
+                    seatLine += ",";
+                }
+            }
+            seatUpdated = true;
+            break;
+        }
+    }
+
+    if (!seatUpdated) {
+        // check xem kh co flightid -> bao loi
+        setTextColor(12);
+        cout << "Flight ID không tồn tại trong danh sách ghế trống!" << endl;
+        setTextColor(7);
+        return;
+    }
+
+    // Ghi lai file ghe trong sau khi cap nhat
+    outFile.open(seatListFile);
+    for (const string& l : seatLines) {
+        outFile << l << endl;
+    }
+    outFile.close();
+
+    // Tao ve moi va them vao danh sach trong ChuyenBay.txt
+    string ticketID = customerID + "_" + to_string(seatNumber); // CMND_SoGhe
+    addTicketToTicketList(flightID, ticketID, "TextFiles/ChuyenBay.txt");
+
+    // Luu ve vao file rieng
+    outFile.open(ticketID + ".txt");
+    outFile << flightID << "," << customerInfo << "," << seatNumber << endl;
+    outFile.close();
+
+    //Thong bao cho admin biet da hoan thanh
+    system("cls");
+    setTextColor(11);
+    cout << "Dat ve thanh cong! Ve da duoc luu tai " << ticketID << ".txt" << endl;
+    setTextColor(7);
+}
+
+
+void Flight::processBuyTicket()
+{
+    vector<Flight> danhSachChuyenBay;
+    Flight::loadFlightFromFile(danhSachChuyenBay);
+    for (auto& f : danhSachChuyenBay)
+    {
+        if (f.TicketList.empty())
+        {
+            continue;
+        }
+        
+    }
+}
+
+// Hay them trong bien ticket khi dat ve phai check ten trong file KhachHang.txt de dat ve dung nguoi 

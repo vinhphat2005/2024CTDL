@@ -178,7 +178,7 @@ void ScreenAdmin()
             switch (currentOption)
             {
             case 0:
-                cout << "Xu ly dat ve thanh cong" << endl;
+                Flight::bookTicket
                 break;
             case 1:
                 cout << "xu ly tra ve" << endl;

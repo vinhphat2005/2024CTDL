@@ -27,4 +27,6 @@ public:
     static vector<int> loadSeatsFromFile(const string& flightID);
     static bool bookSeat(int seat, const string& _flightID);
     static void addTicketToTicketList(const string& flightID, const string& ticket, const string& fileName);
+    static void bookTicket(const string& flightID, const string& customerID, int seatNumber, const string& customerFile, const string& seatListFile);
+    static void processBuyTicket();
 };

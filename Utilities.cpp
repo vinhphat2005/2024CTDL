@@ -91,6 +91,7 @@ void printAdminTitle(int screenWidth)
     cout << endl;
     setTextColor(7);
 }
+// tim seat Count su dung airplaneID
 int findSeatCount(const string& airplaneIDToFind)
 {
     ifstream inFile("TextFiles/MayBay.txt");
@@ -115,6 +116,7 @@ int findSeatCount(const string& airplaneIDToFind)
     inFile.close();
     return 1;
 }
+// su dung vertical padding de can khoang cach ra chinh giua menu
 void useVerticalPadding(int VerticalPadding)
 {
     for (int i = 0; i < VerticalPadding; i++)
