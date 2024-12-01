@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <string>
+#include <algorithm>
 using namespace std;
 //constructor
 Flight::Flight() : flightID(""), departureDate(""), airplaneID(""), destination(""), status(1) {}
@@ -27,9 +28,24 @@ void Flight::inputFlight(vector<Airplane>& danhSachMayBay, const vector<Flight>&
 {
     while (true)
     {
-        cout << "Nhap ma chuyen bay: ";
-        cin >> flightID;
-        cin.ignore();
+        cout << "Nhap ma chuyen bay (khong vuot 10 ki tu): ";
+        getline(cin, flightID);
+
+        if (flightID.empty() || all_of(flightID.begin(), flightID.end(), isspace))
+        {
+            setTextColor(12);
+            cout << "Ma chuyen bay khong duoc de trong, vui long nhap lai!" << endl;
+            setTextColor(7);
+            continue;
+        }
+        else if (flightID.length() > 10)
+        {
+            setTextColor(12);
+            cout << "Ma chuyen bay khong duoc vuot qua 10 ky tu, vui long nhap lai!" << endl;
+            setTextColor(7);
+            continue;
+        }
+        // Kiem tra xem flightId co ton tai ch
         bool isDuplicate = false;
         for (const auto& flight : danhSachChuyenBay)
         {
@@ -50,14 +66,26 @@ void Flight::inputFlight(vector<Airplane>& danhSachMayBay, const vector<Flight>&
         {
             break;
         }
+        // lam sach lai bo dem nhap
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
-    //Nhap Date
+
+    // Nhap Date
     int day, month, year;
     while (true)
     {
         cout << "Nhap ngay xuat phat (dd mm yyyy): ";
         string dateInput;
         getline(cin, dateInput);
+
+        if (dateInput.empty() || all_of(dateInput.begin(), dateInput.end(), isspace)) {
+            setTextColor(12);
+            cout << "Ngay thang nam khong duoc de trong, vui long nhap lai!" << endl;
+            setTextColor(7);
+            continue;
+        }
+
         stringstream ss(dateInput);
         if (ss >> day >> month >> year && isValidDate(day, month, year))
         {
@@ -74,18 +102,25 @@ void Flight::inputFlight(vector<Airplane>& danhSachMayBay, const vector<Flight>&
         }
     }
 
-    //Nhap airplaneID
+    // Nhap airplaneID
     while (true)
     {
         cout << "Nhap ma may bay: ";
-        cin >> airplaneID;
-        cin.ignore();
+        getline(cin, airplaneID);
+
+        if (airplaneID.empty() || all_of(airplaneID.begin(), airplaneID.end(), isspace)) {
+            setTextColor(12);
+            cout << "Ma may bay khong duoc de trong, vui long nhap lai!" << endl;
+            setTextColor(7);
+            continue;
+        }
+
         // Kiem tra airplaneID co ton tai khong
         bool found = false;
         Airplane::loadAirplanesFromFile(danhSachMayBay);
         for (const auto& airplane : danhSachMayBay)
         {
-            if (airplane.getAirplaneID() == airplaneID) 
+            if (airplane.getAirplaneID() == airplaneID)
             {
                 found = true;
                 break;
@@ -102,29 +137,57 @@ void Flight::inputFlight(vector<Airplane>& danhSachMayBay, const vector<Flight>&
             setTextColor(7);
         }
     }
-    //Nhap Destination
-    cout << "Nhap san bay den: ";
-    getline(cin, destination);
-    
-    //Nhap status
+
+    // Nhap Destination
+    while (true)
+    {
+        cout << "Nhap san bay den (khong vuot 20 ki tu): ";
+        getline(cin, destination);
+
+        if (destination.empty() || all_of(destination.begin(), destination.end(), isspace))
+        {
+            setTextColor(12);
+            cout << "San bay den khong duoc de trong, vui long nhap lai!" << endl;
+            setTextColor(7);
+        }
+        else if (destination.length() > 20)
+        {
+            setTextColor(12);
+            cout << "San bay den khong duoc vuot qua 20 ky tu, vui long nhap lai!" << endl;
+            setTextColor(7);
+        }
+        else {
+            break;
+        }
+    }
+
+    // Nhap status
     do
     {
         cout << "Nhap trang thai cua chuyen bay (0 la huy chuyen, 1 la con ve, 2 la het ve, 3 la hoan tat): ";
-        cin >> status;
-        if (cin.fail() || status < 0 || status > 3)
+        string statusInput;
+        getline(cin, statusInput);
+
+        if (statusInput.empty() || all_of(statusInput.begin(), statusInput.end(), isspace))
+        {
+            setTextColor(12);
+            cout << "Trang thai khong duoc de trong, vui long nhap lai!" << endl;
+            setTextColor(7);
+            continue;
+        }
+
+        stringstream ss(statusInput);
+        if (ss >> status && status >= 0 && status <= 3)
+        {
+            break;
+        }
+        else
         {
             setTextColor(12);
             cout << "Status khong hop le, vui long nhap lai." << endl;
             setTextColor(7);
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-        else
-        {
-            break;
         }
     } while (true);
-    
 }
 //Xuat ra cac chuyen bay
 void Flight::displayflight() const
@@ -159,19 +222,37 @@ void Flight::saveFlightsToFile(vector<Airplane>& danhSachMayBay, const vector<Fl
         return;
     }
     int soluongchuyenbay;
-    do
+    string input;
+    do 
     {
         setTextColor(11);
-        cout << "hay nhap so luong chuyen bay ma ban muon them (phai lon hon 0): ";
+        cout << "Hay nhap so luong chuyen bay ma ban muon them (phai lon hon 0): ";
         setTextColor(7);
-        cin >> soluongchuyenbay;
-        if (soluongchuyenbay <= 0)
+
+    
+        getline(cin, input);
+
+        // Kiem tra co de trong khong
+        if (input.empty()) 
         {
             setTextColor(12);
-            cout << "so luong nhap khong hop le. vui long nhap lai!" << endl;
+            cout << "So luong khong duoc de trong. Vui long nhap lai!" << endl;
             setTextColor(7);
+            continue;
         }
-    } while (soluongchuyenbay <= 0);
+
+        // Kiem tra co phai so nguyen khong
+        stringstream ss(input);
+        if (!(ss >> soluongchuyenbay) || soluongchuyenbay <= 0) {
+            setTextColor(12);
+            cout << "So luong nhap khong hop le. Vui long nhap lai!" << endl;
+            setTextColor(7);
+            continue;
+        }
+
+        break; // thoat khoi neu hop le
+    } while (true);
+
     //Su dung input de moi` nguoi dung nhap va dua vao file
     for (int i = 0; i < soluongchuyenbay; i++)
     {
@@ -211,7 +292,7 @@ void Flight::loadFlightFromFile(vector<Flight>& danhSachChuyenBay)
         string fID, date, aID, des;
         int sta = 0, seatCount = 0;
 
-        
+        //doc tung dong
         getline(ss, fID, ',');  
         getline(ss, date, ',');  
         getline(ss, aID, ',');  
@@ -221,7 +302,7 @@ void Flight::loadFlightFromFile(vector<Flight>& danhSachChuyenBay)
         ss >> seatCount;  
         ss.ignore(1, ','); 
 
-      
+        //doc tickets
         string ticketListStr;
         vector<string> ticketList;
         if (getline(ss, ticketListStr)) {
@@ -238,7 +319,7 @@ void Flight::loadFlightFromFile(vector<Flight>& danhSachChuyenBay)
             availableSeats = vector<int>(seatCount, 1);  
         }
 
-      
+        //da doc thanh cong, bo vao danhSachChuyenBay
         Flight flight(fID, date, aID, des, sta, seatCount);
         flight.availableSeats = availableSeats;
         flight.TicketList = ticketList;
@@ -289,28 +370,32 @@ bool Flight::checkStatus(const string& _flightID)
     setTextColor(7);
     return false;
 }
-// luu seats vao file danhsachghetrong
-void Flight::saveSeatsToFile(const string& flightID, const vector<int>& availableSeats) {
- 
+// luu seats vao file DanhSachGheTrong
+void Flight::saveSeatsToFile(const string& flightID, const vector<int>& availableSeats) 
+{
+    //doc file
     ifstream inFile("TextFiles/DanhSachGheTrong.txt");
     if (!inFile.is_open()) {
         cerr << "Error: Khong mo duoc file DanhSachGheTrong.txt" << endl;
         return;
     }
-
+    
     vector<string> fileContent;
     string line;
     bool found = false;
 
-    while (getline(inFile, line)) {
+    while (getline(inFile, line)) 
+    {
         stringstream ss(line);
         string currentFlightID;
         ss >> currentFlightID;
-
-        if (currentFlightID == flightID) {
+        //Tim xem neu trung -> da co -> thay the
+        if (currentFlightID == flightID) 
+        {
            
             stringstream updatedSeatsStream;
-            for (size_t i = 0; i < availableSeats.size(); ++i) {
+            for (size_t i = 0; i < availableSeats.size(); ++i) 
+            {
                 updatedSeatsStream << availableSeats[i];
                 if (i != availableSeats.size() - 1) {
                     updatedSeatsStream << ",";
@@ -325,7 +410,7 @@ void Flight::saveSeatsToFile(const string& flightID, const vector<int>& availabl
         }
     }
     inFile.close();
-
+    //neu khong tim thay -> flightID moi -> tao ra mot cai moi
     if (!found) {
         stringstream newSeatsStream;
         for (size_t i = 0; i < availableSeats.size(); ++i) {
@@ -337,9 +422,10 @@ void Flight::saveSeatsToFile(const string& flightID, const vector<int>& availabl
         fileContent.push_back(flightID + " " + newSeatsStream.str());
     }
 
- 
+    //check loi
     ofstream outFile("TextFiles/DanhSachGheTrong.txt");
-    if (!outFile.is_open()) {
+    if (!outFile.is_open()) 
+    {
         cerr << "Error: Khong mo duoc file DanhSachGheTrong.txt" << endl;
         return;
     }
@@ -354,13 +440,15 @@ void Flight::saveSeatsToFile(const string& flightID, const vector<int>& availabl
 vector<int> Flight::loadSeatsFromFile(const string& flightID) 
 {
     ifstream fileIn("TextFiles/DanhSachGheTrong.txt");
-    if (!fileIn.is_open()) {
+    if (!fileIn.is_open()) 
+    {
         cerr << "Khong mo duoc file DanhSachGheTrong.txt" << endl;
         return {};
     }
 
     string line;
-    while (getline(fileIn, line)) {
+    while (getline(fileIn, line)) 
+    {
         stringstream ss(line);
         string fID, seatsStr;
 
@@ -372,7 +460,8 @@ vector<int> Flight::loadSeatsFromFile(const string& flightID)
             string seat;
 
 
-            while (getline(seatsStream, seat, ',')) {
+            while (getline(seatsStream, seat, ',')) 
+            {
                 availableSeats.push_back(stoi(seat));
             }
             fileIn.close();
@@ -383,7 +472,7 @@ vector<int> Flight::loadSeatsFromFile(const string& flightID)
     return {};
 }
 
-//su dung de check coi viec dat ve co hop le khong (check thu tu ghe)
+//su dung de check coi viec dat ve co hop le khong (check thu tu ghe) 
 bool Flight::bookSeat(int seat, const string& _flightID)
 {
     vector<Flight> tempFlight;
@@ -393,6 +482,7 @@ bool Flight::bookSeat(int seat, const string& _flightID)
     {
         if (flight.flightID == _flightID)
         {
+            //su dung ham loadSeats de lay seats tu trong file danhsachghetrong
             vector<int> availableSeats = loadSeatsFromFile(_flightID);
             if (availableSeats.empty())
             {
@@ -453,14 +543,16 @@ void Flight::addTicketToTicketList(const string& flightID, const string& ticket,
     bool flightFound = false;
 
     // doc file vao vector
-    while (getline(inFile, line)) {
+    while (getline(inFile, line)) 
+    {
         stringstream ss(line);
         string tempFlightID;
 
         // tach flightid khoi dau phay
         getline(ss, tempFlightID, ',');
 
-        if (tempFlightID == flightID) {
+        if (tempFlightID == flightID) 
+        {
             
             flightFound = true;
 
@@ -487,7 +579,7 @@ void Flight::addTicketToTicketList(const string& flightID, const string& ticket,
     outFile.close();
 }
 
-
+//Xu ly tra ve ticket
 void Flight::bookTicket(const string& flightID, const string& customerID, int seatNumber, const string& customerFile, const string& seatListFile) {
     vector<string> customerList;
     string customerInfo;
@@ -566,9 +658,17 @@ void Flight::bookTicket(const string& flightID, const string& customerID, int se
                 seatStatus.push_back(stoi(seatToken)); // dua no vao vector
             }
 
-            if (seatNumber < 1 || seatNumber > seatStatus.size() || seatStatus[seatNumber - 1] == 1) 
+            if (seatNumber < 1 || seatNumber > static_cast<int>(seatStatus.size()))
             {
-                cout << "Ghế đã được đặt hoặc không tồn tại!" << endl;
+                setTextColor(12);
+                cout << "So ghe khong hop le, vui long nhap lai!" << endl;
+                setTextColor(7);
+                return;
+            }
+            if (seatStatus[seatNumber - 1] == 1) {
+                setTextColor(12);
+                cout << "Ghe da duoc dat, vui long chon ghe khac!" << endl;
+                setTextColor(7);
                 return;
             }
 
@@ -591,7 +691,7 @@ void Flight::bookTicket(const string& flightID, const string& customerID, int se
     if (!seatUpdated) {
         // check xem kh co flightid -> bao loi
         setTextColor(12);
-        cout << "Flight ID không tồn tại trong danh sách ghế trống!" << endl;
+        cout << "Flight ID khong ton tai!" << endl;
         setTextColor(7);
         return;
     }

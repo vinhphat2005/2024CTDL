@@ -113,20 +113,36 @@ bool Ticket::isValidInput(const string& input) {
 void Ticket::saveTicketToFile()
 { 
     int soluongve;
+    string input;
+
+    // Nhap so luong ve
     do
     {
         setTextColor(11);
-        cout << "hay nhap so luong ve muon dat (phai lon hon 0): ";
+        cout << "Hay nhap so luong ve muon dat (phai lon hon 0): ";
         setTextColor(7);
-        cin >> soluongve;
-        cin.ignore();
-        if (soluongve <= 0)
-        {
+
+        getline(cin, input);
+
+        // Kiem tra neu de trong
+        if (input.empty() || input.find_first_not_of(' ') == string::npos) {
             setTextColor(12);
-            cout << "so luong nhap khong hop le. vui long nhap lai!" << endl;
+            cout << "So luong khong duoc de trong. Vui long nhap lai!" << endl;
             setTextColor(7);
+            continue;
         }
-    } while (soluongve <= 0);
+
+        // Kiem tra co nguyen
+        stringstream ss(input);
+        if (!(ss >> soluongve) || soluongve <= 0) {
+            setTextColor(12);
+            cout << "So luong nhap khong hop le. Vui long nhap lai!" << endl;
+            setTextColor(7);
+            continue;
+        }
+
+        break; // Thoat neu ok
+    } while (true);
     for (int i = 0; i < soluongve; i++)
     {
         Ticket newTicket;

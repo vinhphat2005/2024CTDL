@@ -120,6 +120,7 @@ void Screen()
                 }
                 break;
             case 1:
+                // Dat ticket
                 Ticket::saveTicketToFile();
                 break;
             case 2:
@@ -178,7 +179,7 @@ void ScreenAdmin()
             switch (currentOption)
             {
             case 0:
-                Flight::bookTicket
+                
                 break;
             case 1:
                 cout << "xu ly tra ve" << endl;

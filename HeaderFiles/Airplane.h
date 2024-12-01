@@ -12,7 +12,7 @@ public:
     Airplane(string aID, int seat);
     int getSeatCount() const;
     string getAirplaneID() const;
-    void inputAirplane();
+    void inputAirplane(vector<Airplane>& danhSachMayBay);
     void displayAirplane() const;
     static void saveAirplanesToFile(vector<Airplane>& danhSachMayBay);
     static void loadAirplanesFromFile(vector<Airplane>& danhSachMayBay);
