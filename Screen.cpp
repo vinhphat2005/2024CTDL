@@ -7,6 +7,7 @@
 using namespace std;
 vector<Airplane> danhSachMayBay;
 vector<Flight> danhSachChuyenBay;
+vector<string> TicketList;
 void Menu(int currentOption)
 {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -131,7 +132,11 @@ void Screen()
                 }
                 return;
             case 3:
-               
+                Flight::getTicketList(TicketList, "TextFiles/ChuyenBay.txt");
+                for (const auto& ticket : TicketList)
+                {
+                    cout << ticket << endl;
+                }
                 break;
             case 4:
                 cout << "ban da chon chuc nang 5" << endl;

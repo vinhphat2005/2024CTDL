@@ -14,7 +14,7 @@ private:
     string destination;
     int status; // 0 -> cancel, 1 -> con cho, 2 -> full, 3 -> hoan tat
     vector<int> availableSeats;
-    vector<string> TicketList;
+    vector<Ticket> TicketList;
 public:
     Flight();
     Flight(const string& flightID, const string& departureDate, const string& airplaneID, const string& destination, int status, int seatCount);
@@ -26,7 +26,8 @@ public:
     static void saveSeatsToFile(const string& flightID, const vector<int>& seats);
     static vector<int> loadSeatsFromFile(const string& flightID);
     static bool bookSeat(int seat, const string& _flightID);
-    static void addTicketToTicketList(const string& flightID, const string& ticket, const string& fileName);
+    static void addTicketToTicketList(const Ticket& newTicket, const string& fileName);
     static void bookTicket(const string& flightID, const string& customerID, int seatNumber, const string& customerFile, const string& seatListFile);
     static void processBuyTicket();
+    static void getTicketList(vector<string>& TicketList, const string& fileName);
 };

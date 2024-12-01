@@ -14,7 +14,19 @@ Ticket::Ticket(const string& fID, const string& cID, const string& cName, int se
     : flightID(fID), customerID(cID), customerName(cName), seatNumber(seat) {
     ticketID = generateTicketID();
 }
+// Getter
+string Ticket::getTicketID() const { return ticketID; }
+string Ticket::getFlightID() const { return flightID; }
+string Ticket::getCustomerID() const { return customerID; }
+string Ticket::getCustomerName() const { return customerName; }
+int Ticket::getSeatNumber() const { return seatNumber; }
 
+// Setter
+void Ticket::setTicketID(const string& tID) { ticketID = tID; }
+void Ticket::setFlightID(const string& fID) { flightID = fID; }
+void Ticket::setCustomerID(const string& cID) { customerID = cID; }
+void Ticket::setCustomerName(const string& cName) { customerName = cName; }
+void Ticket::setSeatNumber(int sNum) { seatNumber = sNum; }
 //ham` de tao ra TicketID
 string Ticket::generateTicketID() const {
     ostringstream oss;
@@ -88,7 +100,6 @@ void Ticket::inputTicket()
             setTextColor(7);
         }
     } while (customerName.empty() || customerName.find_first_not_of(" \t") == string::npos);
-    Flight::addTicketToTicketList(flightID, ticketID, "TextFiles/ChuyenBay.txt");
 }
 
 
@@ -150,6 +161,7 @@ void Ticket::saveTicketToFile()
         cout << "Hay nhap ve thu " << i + 1 << ": \n";
         setTextColor(7);
         newTicket.inputTicket();
+        Flight::addTicketToTicketList(newTicket, "TextFiles/ChuyenBay.txt");
         string filename = "TextFiles/" + newTicket.ticketID + ".txt";
         ofstream outFile(filename);
 
