@@ -1,6 +1,7 @@
 #include "HeaderFiles/Ticket.h"
 #include "HeaderFiles/Flight.h"
 #include "HeaderFiles/Utilities.h"
+#include "HeaderFiles/Customer.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -49,7 +50,7 @@ void Ticket::inputTicket()
             setTextColor(7);
             continue; 
         }
-        //kiem tra ma chuyen bay
+        //kiem tra status chuyen bay coi co ok khong (Phai con ve)
         if (!Flight::checkStatus(flightID))
         {
             continue;
@@ -80,28 +81,32 @@ void Ticket::inputTicket()
 
     this->ticketID = generateTicketID();
     do
+        //Nhap cmnd
     {
-        cout << "Nhap CMND cho khach hang: ";
+        cout << "Nhap CMND cho khach hang (11 ky tu): ";
         getline(cin, customerID);
-        if (!isValidInput(customerID))
+        if (customerID.length() != 11 || customerID.find_first_not_of("0123456789") != string::npos)
         {
             setTextColor(12);
-            cout << "CMND khong hop le. Vui long chi nhap ky tu va so!" << endl;
+            cout << "CMND phai co dung 11 ky tu va chi bao gom so!" << endl;
             setTextColor(7);
         }
-    } while (customerID.empty() || isValidInput(customerID) == false);
-    do
-    {
-        cout << "Nhap ho ten khach hang: ";
-        getline(cin, customerName);
-        if (customerName.empty() || customerName.find_first_not_of(" \t") == string::npos) {
-            setTextColor(12);
-            cout << "Ho ten khong duoc de trong hoac chi chua khoang trang!" << endl;
-            setTextColor(7);
-        }
-    } while (customerName.empty() || customerName.find_first_not_of(" \t") == string::npos);
-}
+    } while (customerID.length() != 11 || customerID.find_first_not_of("0123456789") != string::npos);
 
+    do
+        //Nhap ho ten
+    {
+        cout << "Nhap ho ten khach hang (toi da 20 ky tu): ";
+        getline(cin, customerName);
+        if (customerName.empty() || customerName.find_first_not_of(" \t") == string::npos || customerName.length() > 20)
+        {
+            setTextColor(12);
+            cout << "Ho ten khong duoc de trong, chi chua khoang trang, va phai nho hon 20 ky tu!" << endl;
+            setTextColor(7);
+        }
+    } while (customerName.empty() || customerName.find_first_not_of(" \t") == string::npos || customerName.length() > 20);
+    Customer::saveCustomerToFiles(customerID, customerName);
+}
 
 //ham` xuat ra ticket
 void Ticket::displayTicket() const
@@ -154,6 +159,7 @@ void Ticket::saveTicketToFile()
 
         break; // Thoat neu ok
     } while (true);
+
     for (int i = 0; i < soluongve; i++)
     {
         Ticket newTicket;

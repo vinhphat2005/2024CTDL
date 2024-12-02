@@ -10,5 +10,6 @@ private:
     string customerName;
 public:
     Customer(int num, string cmnd, string n);
+    static void saveCustomerToFiles(const string& customerID, const string& customerName);
 };
 

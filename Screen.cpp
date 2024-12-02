@@ -135,7 +135,7 @@ void Screen()
                 Flight::getTicketList(TicketList, "TextFiles/ChuyenBay.txt");
                 for (const auto& ticket : TicketList)
                 {
-                    cout << ticket << endl;
+                    
                 }
                 break;
             case 4:
