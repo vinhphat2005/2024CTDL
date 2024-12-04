@@ -11,6 +11,7 @@ private:
     string customerID;
     string customerName;
     int seatNumber;
+    bool checkReady;
     string generateTicketID() const;
 public:
     Ticket();
@@ -20,13 +21,13 @@ public:
     string getCustomerID() const;
     string getCustomerName() const;
     int getSeatNumber() const;
-
-    // Setter neu du thi xoa sau
     void setTicketID(const string& tID);
     void setFlightID(const string& fID);
     void setCustomerID(const string& cID);
     void setCustomerName(const string& cName);
     void setSeatNumber(int sNum);
+    void setCheckReady(bool status);
+    bool isCheckReady() const;
     void inputTicket();
     void displayTicket() const;
     static bool isValidInput(const string& input);

@@ -184,10 +184,10 @@ void ScreenAdmin()
             switch (currentOption)
             {
             case 0:
-                
+                Flight::processTickets(danhSachChuyenBay, "TextFiles/ChuyenBay.txt", "TextFiles/KhachHang.txt");
                 break;
             case 1:
-                cout << "xu ly tra ve" << endl;
+               
                 break;
             case 2:
                 cout << "Thong ke thanh cong" << endl;

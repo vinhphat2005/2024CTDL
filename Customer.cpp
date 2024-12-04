@@ -1,8 +1,9 @@
 #include "HeaderFiles/Customer.h"
+#include "HeaderFiles/Utilities.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
+#include <vector>
 Customer::Customer(int num, string cmnd, string n) : number(num = 0), customerID(cmnd), customerName(n) {}
 
 void Customer::saveCustomerToFiles(const string& customerID, const string& customerName)
@@ -33,4 +34,61 @@ void Customer::saveCustomerToFiles(const string& customerID, const string& custo
     fileOut << number << " " << customerID << " " << customerName << endl;
 
     fileOut.close();
+}
+
+bool Customer::removeCustomerFromQueue(const string & customerID, const string & customerName, const string & fileName)
+{
+    ifstream inFile(fileName);
+    if (!inFile.is_open()) 
+    {
+        cerr << "Khong the mo file " << fileName << " de doc.\n";
+        return false;
+    }
+
+    vector<string> lines;
+    string line;
+    int customerIndex = -1;
+
+    // Doc du lieu va tim vi tri cua khach hang
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        int number;
+        string id, name;
+        ss >> number >> id;
+        getline(ss, name);
+
+        if (id == customerID && name.find(customerName) != string::npos) {
+            customerIndex = number;
+            continue; // Bo qua khach hang nay (tuc la xoa)
+        }
+        lines.push_back(line);
+    }
+    inFile.close();
+
+    // Neu khong tim thay, bao loi
+    if (customerIndex == -1) {
+        cerr << "Khong tim thay khach hang trong danh sach.\n";
+        return false;
+    }
+
+    // Cap nhat thu tu cua cac khach hang lai
+    ofstream outFile(fileName);
+    if (!outFile.is_open()) {
+        cerr << "Khong the mo file " << fileName << " de ghi.\n";
+        return false;
+    }
+
+    int newIndex = 1;
+    for (const auto& l : lines) {
+        stringstream ss(l);
+        int number;
+        string id, name;
+        ss >> number >> id;
+        getline(ss, name);
+        outFile << newIndex << " " << id << name << endl;
+        newIndex++;
+    }
+    outFile.close();
+
+    return true;
 }

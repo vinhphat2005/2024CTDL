@@ -10,9 +10,9 @@
 #include <vector>
 using namespace std;
 //constructor
-Ticket::Ticket() : ticketID(""), flightID(""), customerID(""), customerName(""), seatNumber(0) {}
+Ticket::Ticket() : ticketID(""), flightID(""), customerID(""), customerName(""), seatNumber(0), checkReady(false) {}
 Ticket::Ticket(const string& fID, const string& cID, const string& cName, int seat)
-    : flightID(fID), customerID(cID), customerName(cName), seatNumber(seat) {
+    : flightID(fID), customerID(cID), customerName(cName), seatNumber(seat), checkReady(false) {
     ticketID = generateTicketID();
 }
 // Getter
@@ -28,13 +28,18 @@ void Ticket::setFlightID(const string& fID) { flightID = fID; }
 void Ticket::setCustomerID(const string& cID) { customerID = cID; }
 void Ticket::setCustomerName(const string& cName) { customerName = cName; }
 void Ticket::setSeatNumber(int sNum) { seatNumber = sNum; }
+void Ticket::setCheckReady(bool status) { checkReady = status; }
 //ham` de tao ra TicketID
-string Ticket::generateTicketID() const {
+string Ticket::generateTicketID() const 
+{
     ostringstream oss;
     oss << flightID << "_" << setw(3) << setfill('0') << seatNumber; // Example: FLVN123_005
     return oss.str();
 }
-
+bool Ticket::isCheckReady() const
+{
+    return checkReady;
+}
 //ham` input
 void Ticket::inputTicket()
 {
@@ -178,12 +183,14 @@ void Ticket::saveTicketToFile()
         }
         outFile << newTicket.ticketID << " "
             << newTicket.customerID << " "
-            << "\"" << newTicket.customerName << "\" "
+            << newTicket.customerName << " "
             << newTicket.flightID << " "
-            << newTicket.seatNumber << "\n";
+            << newTicket.seatNumber << " "
+            << newTicket.isCheckReady() << "\n";
         outFile.close();
         setTextColor(15);
         cout << "Da luu ve vao file " << filename << " thanh cong.\n";
         setTextColor(7);
     }
 }
+

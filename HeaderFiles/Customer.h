@@ -11,5 +11,6 @@ private:
 public:
     Customer(int num, string cmnd, string n);
     static void saveCustomerToFiles(const string& customerID, const string& customerName);
+    static bool removeCustomerFromQueue(const string& customerID, const string& customerName, const string& fileName);
 };
 

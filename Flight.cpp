@@ -1,5 +1,6 @@
 ﻿#include "HeaderFiles/Flight.h"
 #include "HeaderFiles/Utilities.h"
+#include "HeaderFiles/Customer.h"
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -7,6 +8,7 @@
 #include <iomanip>
 #include <string>
 #include <algorithm>
+#include <cstdio>
 using namespace std;
 //constructor
 Flight::Flight() : flightID(""), departureDate(""), airplaneID(""), destination(""), status(1) {}
@@ -16,13 +18,21 @@ Flight::Flight(const string& flightID, const string& departureDate, const string
     this->airplaneID = airplaneID;
     this->destination = destination;
     this->status = status;
-    if (seatCount != 0) 
+    if (seatCount != 0)
     {
         availableSeats.resize(seatCount, 1);
     }
 
 }
 
+vector<Ticket> Flight::getTicketList() const 
+{
+    return TicketList;
+}
+string Flight::getFlightID() const 
+{
+    return flightID;
+}
 //input
 void Flight::inputFlight(vector<Airplane>& danhSachMayBay, const vector<Flight>& danhSachChuyenBay)
 {
@@ -275,62 +285,6 @@ void Flight::saveFlightsToFile(vector<Airplane>& danhSachMayBay, const vector<Fl
 }
 
 
-//doc file tu file ChuyenBay.txt 
-//void Flight::loadFlightFromFile(vector<Flight>& danhSachChuyenBay)
-//{
-//    ifstream fileIn("TextFiles/ChuyenBay.txt");
-//    if (!fileIn.is_open())
-//    {
-//        cerr << "Khong mo duoc file ChuyenBay.txt" << endl;
-//        return;
-//    }
-//
-//    danhSachChuyenBay.clear();
-//    string line;
-//    while (getline(fileIn, line)) {
-//        stringstream ss(line);
-//        string fID, date, aID, des;
-//        int sta = 0, seatCount = 0;
-//
-//        //doc tung dong
-//        getline(ss, fID, ',');  
-//        getline(ss, date, ',');  
-//        getline(ss, aID, ',');  
-//        getline(ss, des, ',');  
-//        ss >> sta;  
-//        ss.ignore(1, ',');  
-//        ss >> seatCount;  
-//        ss.ignore(1, ','); 
-//
-//        //doc tickets
-//        string ticketListStr;
-//        vector<string> ticketList;
-//        if (getline(ss, ticketListStr)) {
-//            stringstream ticketStream(ticketListStr);
-//            string ticket;
-//            while (getline(ticketStream, ticket, ',')) {
-//                ticketList.push_back(ticket);
-//            }
-//        }
-//
-//        
-//        vector<int> availableSeats = loadSeatsFromFile(fID);
-//        if (availableSeats.empty()) {
-//            availableSeats = vector<int>(seatCount, 1);  
-//        }
-//
-//        //da doc thanh cong, bo vao danhSachChuyenBay
-//        Flight flight(fID, date, aID, des, sta, seatCount);
-//        flight.availableSeats = availableSeats;
-//        
-//
-//        danhSachChuyenBay.emplace_back(flight);
-//    }
-//
-//    fileIn.close();
-//}
-
-
 void Flight::loadFlightFromFile(vector<Flight>& danhSachChuyenBay)
 {
     ifstream fileIn("TextFiles/ChuyenBay.txt");
@@ -371,6 +325,7 @@ void Flight::loadFlightFromFile(vector<Flight>& danhSachChuyenBay)
         {
             string ticketID, ticketFlightID, customerID, customerName;
             int seatNumber = 0;
+            bool checkReady = false;
 
             getline(ss, ticketID, ',');
             getline(ss, ticketFlightID, ',');
@@ -378,6 +333,8 @@ void Flight::loadFlightFromFile(vector<Flight>& danhSachChuyenBay)
             getline(ss, customerName, ',');
             ss >> seatNumber;
             ss.ignore(1, ','); // doc so ghe xong bo qua dau phay
+            ss >> checkReady;
+            ss.ignore(1, ','); // doc xong checkReady bo qua dau phay
             //kiem tra khop ID 
             if (ticketFlightID != fID)
             {
@@ -388,7 +345,14 @@ void Flight::loadFlightFromFile(vector<Flight>& danhSachChuyenBay)
             }
 
             Ticket ticket(ticketFlightID, customerID, customerName, seatNumber);
+            ticket.setTicketID(ticketID);
+            if (checkReady == 0)
+            {
+                ticket.setCheckReady(false);
+            }
+            else ticket.setCheckReady(true);
             ticketList.push_back(ticket);
+            
         }
         //Bo ticket vao flight
         flight.TicketList = ticketList;
@@ -605,7 +569,8 @@ bool Flight::bookSeat(int seat, const string& _flightID)
 
 
 //Them ve' sau khi da duoc dat hoan thanh vao danhsachve o flight
-void Flight::addTicketToTicketList(const Ticket& newTicket, const string& fileName) {
+void Flight::addTicketToTicketList(const Ticket& newTicket, const string& fileName) 
+{
     vector<string> lines;
     ifstream inFile(fileName);
     string line;
@@ -622,9 +587,12 @@ void Flight::addTicketToTicketList(const Ticket& newTicket, const string& fileNa
         if (tempFlightID == newTicket.getFlightID()) 
         {
             flightFound = true;
-            line += "," + newTicket.getTicketID() + "," + newTicket.getFlightID() + "," +
-                newTicket.getCustomerID() + "," + newTicket.getCustomerName() + "," +
-                to_string(newTicket.getSeatNumber());
+            line += "," + newTicket.getTicketID() + "," +
+                newTicket.getFlightID() + "," +
+                newTicket.getCustomerID() + "," +
+                newTicket.getCustomerName() + "," +
+                to_string(newTicket.getSeatNumber()) + "," +
+                (newTicket.isCheckReady() ? "1" : "0"); 
         }
 
         lines.push_back(line);
@@ -640,7 +608,8 @@ void Flight::addTicketToTicketList(const Ticket& newTicket, const string& fileNa
     }
     //bat dau add vo file ChuyenBay.txt
     ofstream outFile(fileName);
-    for (const string& l : lines) {
+    for (const string& l : lines) 
+    {
         outFile << l << endl;
     }
     outFile.close();
@@ -683,4 +652,361 @@ void Flight::getTicketList(vector<string>& TicketList, const string& fileName)
     }
     inFile.close();
 }
+//xoa file 
+static void deleteFile(const std::string& fileName)
+{
+    if (std::remove(fileName.c_str()) == 0)
+    {
+        
+    }
+    else
+    {
+        std::cerr << "Khong the xoa file: " << fileName
+            << ". Kiem tra xem file co ton tai va co quyen truy cap hay khong." << std::endl;
+    }
+}
+//xoa ticket
+void Flight::removeTicketAndFile(const string& flightID, const string& ticketID, const string& fileName)
+{
+    removeTicket(flightID, ticketID, fileName);
+    string ticketFile = "TextFiles/" + ticketID + ".txt";
+    deleteFile(ticketFile);
+}
 
+void Flight::removeTicket(const string& flightID, const string& ticketID, const string& fileName)
+{
+    vector<string> lines; // Vector để lưu từng dòng của file
+    ifstream inFile(fileName);
+    if (!inFile.is_open())
+    {
+        cerr << "Khong mo duoc file " << fileName << endl;
+        return;
+    }
+
+    string line;
+    while (getline(inFile, line))
+    {
+        // Kiểm tra nếu dòng bắt đầu bằng flightID + ","
+        if (line.find(flightID + ",") == 0)
+        {
+            // Tách dòng thành các token
+            vector<string> tokens;
+            string token;
+            stringstream ss(line);
+            while (getline(ss, token, ','))
+            {
+                tokens.push_back(token);
+            }
+
+            // Tìm vị trí của ticketID trong tokens
+            bool ticketFound = false;
+            for (size_t i = 0; i < tokens.size(); ++i)
+            {
+                if (tokens[i] == ticketID)
+                {
+                    // Kiểm tra có đủ 5 trường sau ticketID để xóa
+                    if (i + 5 < tokens.size())
+                    {
+                        // Xóa 6 trường: ticketID, customerID, customerName, flightID, seatNumber, checkReady
+                        tokens.erase(tokens.begin() + i, tokens.begin() + i + 6);
+                        ticketFound = true;
+                        break; // Giả sử ticketID là duy nhất, nên dừng lại sau khi tìm thấy
+                    }
+                    else
+                    {
+                        setTextColor(12);
+                        cerr << "Khong du lieu de xoa cho ticketID: " << ticketID << endl;
+                        setTextColor(7);
+                    }
+                }
+            }
+
+            if (!ticketFound)
+            {
+                setTextColor(12);
+                cerr << "Khong tim thay ticketID: " << ticketID << " trong flightID: " << flightID << endl;
+                setTextColor(7);
+            }
+
+            // Xây dựng lại dòng sau khi đã xóa
+            string newLine;
+            for (size_t i = 0; i < tokens.size(); ++i)
+            {
+                newLine += tokens[i];
+                if (i != tokens.size() - 1)
+                    newLine += ",";
+            }
+            lines.push_back(newLine);
+        }
+        else
+        {
+            lines.push_back(line); // Dòng không thuộc flightID cần xóa thì giữ nguyên
+        }
+    }
+    inFile.close();
+
+    // Ghi lại dữ liệu đã chỉnh sửa vào file
+    ofstream outFile(fileName);
+    if (!outFile.is_open())
+    {
+        cerr << "Khong the mo file " << fileName << " de ghi." << endl;
+        return;
+    }
+
+    for (const string& l : lines)
+    {
+        outFile << l << endl;
+    }
+    outFile.close();
+}
+
+
+void Flight::processTickets(vector<Flight>& danhSachChuyenBay, const string& fileName, const string& customerFile)
+{
+    loadFlightFromFile(danhSachChuyenBay);
+    for (size_t i = 0; i < danhSachChuyenBay.size();)
+    {
+        auto& flight = danhSachChuyenBay[i];
+        setTextColor(14);
+        cout << "Cac ticket cua chuyen bay " << flight.getFlightID() << " la:\n";
+        setTextColor(7);
+
+        vector<Ticket> ticketsToProcess;
+        for (auto& ticket : flight.getTicketList())
+        {
+            if (!ticket.isCheckReady()) // Loại bỏ ticket đã checkReady
+            {
+                ticketsToProcess.push_back(ticket);
+                cout << ticket.getTicketID() << endl;
+            }
+        }
+
+        if (ticketsToProcess.empty())
+        {
+            setTextColor(14);
+            cout << "Khong co ticket nao can duoc xu ly.\n";
+            setTextColor(7);
+        }
+        else
+        {
+            while (true)
+            {
+                string selectedTicketID;
+                setTextColor(11);
+                cout << "Nhap ID cua ticket muon xu ly: ";
+                setTextColor(7);
+                cin >> selectedTicketID;
+
+                auto it = find_if(ticketsToProcess.begin(), ticketsToProcess.end(),
+                    [&selectedTicketID](const Ticket& t)
+                    {
+                        return t.getTicketID() == selectedTicketID;
+                    });
+
+                if (it == ticketsToProcess.end())
+                {
+                    setTextColor(12);
+                    cout << "Khong tim thay ticket voi ID: " << selectedTicketID << endl;
+                    setTextColor(7);
+                    continue; // Quay lại yêu cầu nhập Ticket ID
+                }
+
+                Ticket& selectedTicket = *it;
+
+                // Đọc thông tin khách hàng
+                ifstream inFile(customerFile);
+                if (!inFile.is_open())
+                {
+                    cerr << "Khong the mo file " << customerFile << " de doc.\n";
+                    break; // Thoát vòng lặp nếu xảy ra lỗi
+                }
+
+                string line;
+                int customerIndex = -1;
+                stringstream ss;
+                while (getline(inFile, line))
+                {
+                    ss.clear();
+                    ss.str(line);
+                    int number;
+                    string id, name;
+                    ss >> number >> id;
+                    getline(ss, name);
+
+                    if (id == selectedTicket.getCustomerID() &&
+                        name.find(selectedTicket.getCustomerName()) != string::npos)
+                    {
+                        customerIndex = number;
+                        break;
+                    }
+                }
+                inFile.close();
+
+                if (customerIndex == -1)
+                {
+                    setTextColor(12);
+                    cerr << "Khong tim thay khach hang tuong ung voi ticket.\n";
+                    setTextColor(7);
+                    break; // Thoát vòng lặp nếu xảy ra lỗi
+                }
+                setTextColor(11);
+                cout << "Khach hang " << selectedTicket.getCustomerName() << " co so thu tu " << customerIndex << ".\n";
+                setTextColor(7);
+
+                char choice;
+                do {
+                    setTextColor(14);
+                    cout << "Ban co muon xu ly ticket nay? (y/n): ";
+                    setTextColor(7);
+                    cin >> choice;
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    if (choice == 'y' || choice == 'Y' || choice == 'n' || choice == 'N') {
+                        break;
+                    }
+                    setTextColor(12);
+                    cout << "Lua chon khong hop le, vui long nhap lai (y/n).\n";
+                    setTextColor(7);
+                } while (true);
+
+                if (choice == 'n' || choice == 'N')
+                {
+                    setTextColor(12);
+                    cout << "Huy bo xu ly ticket.\n";
+                    setTextColor(7);
+                    continue; // Quay lại yêu cầu nhập Ticket ID
+                }
+
+                // Xử lý ticket
+                string ticketFileName = "TextFiles/" + selectedTicketID + ".txt";
+                ifstream ticketFile(ticketFileName);
+                if (!ticketFile.is_open())
+                {
+                    cerr << "Khong mo duoc file " << ticketFileName << endl;
+                    break; // Thoát vòng lặp nếu xảy ra lỗi
+                }
+
+                string ticketData;
+                getline(ticketFile, ticketData);
+                ticketFile.close();
+
+                string newTicketID = selectedTicket.getCustomerID() + selectedTicket.getCustomerName() +
+                    "_" + to_string(selectedTicket.getSeatNumber());
+
+                size_t ticketPos = ticketData.find(selectedTicketID);
+                if (ticketPos != string::npos) {
+                    ticketData.replace(ticketPos, selectedTicketID.length(), newTicketID);
+                }
+
+                // Cập nhật trạng thái checkReady trong đối tượng Ticket
+                selectedTicket.setCheckReady(true);
+
+                string processedFileName = "TextFiles/" + newTicketID + ".txt";
+                ofstream processedFile(processedFileName);
+                processedFile << ticketData << endl;
+                processedFile.close();
+                
+
+                flight.removeTicketAndFile(selectedTicket.getFlightID(), selectedTicketID, fileName);
+                Ticket newTicket(newTicketID, selectedTicket.getCustomerID(),
+                    selectedTicket.getCustomerName(), selectedTicket.getSeatNumber());
+                newTicket.setFlightID(flight.getFlightID());
+                newTicket.setCheckReady(true);
+                flight.addTicketToTicketList(newTicket, fileName);
+
+                // Xóa khách hàng khỏi danh sách
+                if (Customer::removeCustomerFromQueue(selectedTicket.getCustomerID(), selectedTicket.getCustomerName(), customerFile))
+                {
+
+                }
+                else
+                {
+                    setTextColor(12);
+                    cerr << "Khong the xoa khach hang khoi danh sach.\n";
+                    setTextColor(7);
+                }
+
+                setTextColor(15);
+                cout << "Da cap nhat va luu vao chuyen bay hoan tat.\n";
+                setTextColor(7);
+                break; 
+            }
+        }
+        char nextChoice;
+        do {
+            setTextColor(15);
+            cout << "Ban co muon chuyen sang chuyen bay tiep theo? (y/n): ";
+            setTextColor(7);
+            cin >> nextChoice;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            if (nextChoice == 'y' || nextChoice == 'Y' || nextChoice == 'n' || nextChoice == 'N') {
+                loadFlightFromFile(danhSachChuyenBay);
+                break;
+            }
+            setTextColor(12);
+            cout << "Lua chon khong hop le, vui long nhap lai (y/n).\n";
+            setTextColor(7);
+        } while (true);
+
+        if (nextChoice == 'y' || nextChoice == 'Y') {
+            ++i; // Chuyển sang chuyến bay kế tiếp
+        }
+        else {
+            setTextColor(14);
+            cout << "Tiep tuc xu ly chuyen bay hien tai.\n";
+            setTextColor(7);
+        }
+    }
+}
+
+void Flight::processReturnTicket(vector<Flight>& danhSachChuyenBay, const string& ticketsFile, const string& seatsFile) {
+  
+    loadFlightFromFile(danhSachChuyenBay);
+
+    // Duyệt qua từng chuyến bay
+    for (size_t i = 0; i < danhSachChuyenBay.size(); ++i) {
+        auto& flight = danhSachChuyenBay[i];
+
+        // Hiển thị các vé của chuyến bay hiện tại
+        setTextColor(14); // Đổi màu chữ (nếu có hỗ trợ)
+        cout << "Cac ticket cua chuyen bay " << flight.getFlightID() << " la:\n";
+        setTextColor(7); // Reset màu chữ
+
+        vector<string> ticketList;
+        flight.getTicketList(ticketList, ticketsFile); // Lấy danh sách vé từ file
+
+        if (ticketList.empty()) {
+            cout << "Khong co ve nao trong chuyen bay nay.\n";
+            continue;
+        }
+
+        for (size_t j = 0; j < ticketList.size(); ++j) {
+            cout << j + 1 << ". " << ticketList[j] << endl;
+        }
+
+        // Cho phép người dùng chọn vé muốn trả
+        cout << "Nhap so thu tu cua ve muon tra (hoac 0 de bo qua): ";
+        int ticketIndex;
+        cin >> ticketIndex;
+
+        if (ticketIndex == 0) {
+            continue; // Bỏ qua chuyến bay này
+        }
+
+        // Kiểm tra chỉ số hợp lệ
+        if (ticketIndex < 1 || ticketIndex > ticketList.size()) {
+            cout << "Lua chon khong hop le!\n";
+            continue;
+        }
+
+        string selectedTicket = ticketList[ticketIndex - 1];
+
+        // Kiểm tra trạng thái chuyến bay
+        if (flight.getStatus() == 2) { // Giả sử `getStatus()` trả trạng thái của chuyến bay
+            cout << "Khong the tra ve, may bay da hoan tat!" << endl;
+            continue;
+        }
+
+        // Xử lý trả vé
+        flight.processReturnTicket(flight.getFlightID(), ticketsFile, seatsFile);
+    }
+}
