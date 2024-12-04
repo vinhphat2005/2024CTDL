@@ -132,11 +132,7 @@ void Screen()
                 }
                 return;
             case 3:
-                Flight::getTicketList(TicketList, "TextFiles/ChuyenBay.txt");
-                for (const auto& ticket : TicketList)
-                {
-                    
-                }
+                
                 break;
             case 4:
                 cout << "ban da chon chuc nang 5" << endl;
@@ -187,10 +183,11 @@ void ScreenAdmin()
                 Flight::processTickets(danhSachChuyenBay, "TextFiles/ChuyenBay.txt", "TextFiles/KhachHang.txt");
                 break;
             case 1:
-               
+                Flight::processReturnTicket(danhSachChuyenBay, "TextFiles/DanhSachGheTrong.txt");
                 break;
             case 2:
-                cout << "Thong ke thanh cong" << endl;
+                Flight::loadFlightFromFile(danhSachChuyenBay);
+                Flight::processFlightDetails(danhSachChuyenBay);
                 break;
             case 3:
                 setTextColor(14);

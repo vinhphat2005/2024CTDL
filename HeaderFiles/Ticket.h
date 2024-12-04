@@ -12,10 +12,10 @@ private:
     string customerName;
     int seatNumber;
     bool checkReady;
-    string generateTicketID() const;
 public:
     Ticket();
     Ticket(const string& fID, const string& cID, const string& cName, int seat);
+    string generateTicketID() const;
     string getTicketID() const;
     string getFlightID() const;
     string getCustomerID() const;
@@ -32,5 +32,6 @@ public:
     void displayTicket() const;
     static bool isValidInput(const string& input);
     static void saveTicketToFile();
+    static bool getIsBooked(const string& flightID, int seatNumber, const string& fileName);
 };
 

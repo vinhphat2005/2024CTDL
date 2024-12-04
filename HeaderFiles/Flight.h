@@ -20,6 +20,8 @@ public:
     Flight(const string& flightID, const string& departureDate, const string& airplaneID, const string& destination, int status, int seatCount);
     vector<Ticket> getTicketList() const;
     string getFlightID() const;
+    int getStatus() const;
+    string getAirplaneID() const;
     void inputFlight(vector<Airplane>& danhSachMayBay, const vector<Flight>& danhsachChuyenBay);
     void displayflight() const;
     static void saveFlightsToFile(vector<Airplane>& danhSachMayBay, const vector<Flight>& danhSachChuyenBay);
@@ -31,7 +33,11 @@ public:
     static void addTicketToTicketList(const Ticket& newTicket, const string& fileName);
     static void removeTicket(const string& flightID, const string& ticketID, const string& fileName);
     void removeTicketAndFile(const string& flightID, const string& ticketID, const string& fileName);
-    static void getTicketList(vector<string>& TicketList, const string& fileName);
     static void processTickets(vector<Flight>& danhSachChuyenBay, const string& fileName, const string& customerFile);
-    static void processReturnTicket(vector<Flight>& danhSachChuyenBay, const string& ticketsFile, const string& seatsFile);
+    static void processReturnTicket(vector<Flight>& danhSachChuyenBay, const string& seatsFile);
+    static bool updateSeatsFile(const string& seatsFile, const string& ticketID, int seatNumber);
+    static void displayCustomerList(const Flight& chuyenBay);
+    static void displayAvailableSeats(const string& flightID);
+    static void countFlightsByPlane(const vector<Flight>& flights, const string& planeID);
+    static void processFlightDetails(const vector<Flight>& flights);
 };

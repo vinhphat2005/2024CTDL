@@ -194,3 +194,81 @@ void Ticket::saveTicketToFile()
     }
 }
 
+bool Ticket::getIsBooked(const string& flightID, int seatNumber, const string& fileName) 
+{
+    if (seatNumber <= 0) {
+        cerr << "So ghe phai lon hon 0.\n";
+        return false;
+    }
+
+    ifstream inFile(fileName);
+    if (!inFile.is_open()) {
+        cerr << "Khong mo duoc file " << fileName << endl;
+        return false; 
+    }
+
+    string line;
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        string id;
+        ss >> id;
+
+        if (id == flightID) {
+          
+            vector<int> seatStatus;
+            int status;
+            char comma;
+
+            while (ss >> status) {
+                seatStatus.push_back(status);
+                ss >> comma;
+            }
+
+            
+            if (seatNumber > static_cast<int>(seatStatus.size())) {
+                cerr << "So ghe vuot qua gioi han cua chuyen bay.\n";
+                return false;
+            }
+
+            
+            return seatStatus[seatNumber - 1] == 0; 
+        }
+    }
+
+    cerr << "Khong tim thay ma chuyen bay " << flightID << " trong file.\n";
+    return false;
+}
+
+void checkEmptySeats(const string& fileName) {
+    ifstream file(fileName);  
+    if (!file.is_open()) {   
+        cout << "Khong the mo tep!" << endl;
+        return;
+    }
+
+    string line;
+    while (getline(file, line)) {  
+        stringstream ss(line);
+        string seatRow;
+        getline(ss, seatRow, ' ');  
+
+        string seatData;
+        getline(ss, seatData);  
+
+        stringstream seatStream(seatData);
+        string seat;
+        int emptyCount = 0;
+
+       
+        while (getline(seatStream, seat, ',')) {
+            if (seat == "0") {
+                emptyCount++;
+            }
+        }
+
+        
+        cout << "Chuyen bay " << seatRow << " co " << emptyCount << " ghe con trong." << endl;
+    }
+
+    file.close();  
+}
