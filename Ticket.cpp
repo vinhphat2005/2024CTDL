@@ -239,7 +239,7 @@ bool Ticket::getIsBooked(const string& flightID, int seatNumber, const string& f
     return false;
 }
 
-void checkEmptySeats(const string& fileName) {
+static void checkEmptySeats(const string& fileName) {
     ifstream file(fileName);  
     if (!file.is_open()) {   
         cout << "Khong the mo tep!" << endl;

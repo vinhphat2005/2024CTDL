@@ -1,4 +1,4 @@
-#include "HeaderFiles/Airplane.h"
+﻿#include "HeaderFiles/Airplane.h"
 #include "HeaderFiles/Utilities.h"
 #include <iostream>
 #include <fstream>
@@ -103,7 +103,7 @@ void Airplane::displayAirplane() const
 //Luu vao file MayBay.txt (su dung inputAirplane de cho nguoi dung nhap)
 void Airplane::saveAirplanesToFile(vector<Airplane>& danhSachMayBay)
 {
-    ofstream fileOut("TextFiles/MayBay.txt", ios::app);
+    ofstream fileOut("TextFiles/MayBay.txt", ios::app); // Mở file với chế độ thêm
     if (!fileOut.is_open())
     {
         cout << "Khong mo duoc file: TextFiles/MayBay.txt" << endl;
@@ -114,52 +114,32 @@ void Airplane::saveAirplanesToFile(vector<Airplane>& danhSachMayBay)
     int soluongmaybay;
     string input;
     do {
-        setTextColor(11);
         cout << "Hay nhap so luong may bay ma ban muon them (phai lon hon 0): ";
-        setTextColor(7);
-
         getline(cin, input);
 
-        // Kiem tra xem so luong may bay co de trong khong
-        if (input.empty()) 
-        {
-            setTextColor(12);
-            cout << "So luong khong duoc de trong. Vui long nhap lai!" << endl;
-            setTextColor(7);
-            continue;
-        }
-
-        // Kiem tra co phai nguyen khong
-        stringstream ss(input);
-        if (!(ss >> soluongmaybay) || soluongmaybay <= 0) {
-            setTextColor(12);
+        if (input.empty() || !(stringstream(input) >> soluongmaybay) || soluongmaybay <= 0) {
             cout << "So luong nhap khong hop le. Vui long nhap lai!" << endl;
-            setTextColor(7);
             continue;
         }
-
-        break; // Thoat neu hop le
+        break;
     } while (true);
-    // thuc hien su dung input va bo vao file
-    for (int i = 0; i < soluongmaybay; i++)
-    {
-        Airplane newAirplane;
-        setTextColor(14);
-        cout << "Hay nhap may bay thu " << i + 1 << ": \n";
-        setTextColor(7);
-        newAirplane.inputAirplane(danhSachMayBay);
-        danhSachMayBay.emplace_back(newAirplane);
-    }
-    for (const auto& airplane : danhSachMayBay)
-    {
-        fileOut << airplane.airplaneID << " " << airplane.seatCount << endl;
-    }
-    fileOut.close();
-    setTextColor(15);
-    cout << "Da them may bay thanh cong!" << endl;
-    setTextColor(7);
-}
 
+    // Nhập máy bay mới và ghi trực tiếp vào file
+    for (int i = 0; i < soluongmaybay; i++) {
+        Airplane newAirplane;
+        cout << "Hay nhap may bay thu " << i + 1 << ": \n";
+        newAirplane.inputAirplane(danhSachMayBay);
+
+        // Thêm máy bay mới vào danh sách trong bộ nhớ
+        danhSachMayBay.emplace_back(newAirplane);
+
+        // Ghi máy bay mới vào file
+        fileOut << newAirplane.airplaneID << " " << newAirplane.seatCount << endl;
+    }
+
+    fileOut.close();
+    cout << "Da them may bay thanh cong!" << endl;
+}
 //Load lai may bay tu file MayBay.txt
 void Airplane::loadAirplanesFromFile(vector<Airplane>& danhSachMayBay) 
 {

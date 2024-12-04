@@ -15,8 +15,8 @@ void Menu(int currentOption)
     int screenWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
     int screenHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
     system("cls");
-    const int menuSize = 6;
-    string menu[] = { "Hien thi danh sach cac chuyen bay", "Dat ve", "Quan ly", "chuc nang 4", "chuc nang 5", "Thoat" };
+    const int menuSize = 4;
+    string menu[] = { "Hien thi danh sach cac chuyen bay", "Dat ve", "Quan ly", "Thoat" };
     int verticalPadding = (screenHeight - menuSize) / 2;
    
     for (int i = 0; i < verticalPadding; i++) 
@@ -86,13 +86,13 @@ void Screen()
                 currentOption--;
                 if (currentOption < 0) 
                 {
-                    currentOption = 5;
+                    currentOption = 3;
                 }
             }
             else if (key == 80) 
             { 
                 currentOption++;
-                if (currentOption > 5) 
+                if (currentOption > 3) 
                 {
                     currentOption = 0; 
                 }
@@ -131,13 +131,9 @@ void Screen()
                     ScreenAdmin();
                 }
                 return;
+        
+            
             case 3:
-                
-                break;
-            case 4:
-                cout << "ban da chon chuc nang 5" << endl;
-                break;
-            case 5:
                 cout << "Thoat thanh cong" << endl;
                 return;
             }

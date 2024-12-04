@@ -1,6 +1,4 @@
-PhatDepTrai
-12345
-ThuanBeo
-Leagueoflegends
 1
 1
+Phat
+123

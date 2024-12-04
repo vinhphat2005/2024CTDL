@@ -550,12 +550,7 @@ bool Flight::bookSeat(int seat, const string& _flightID)
             }
             //danh dau = 0
             availableSeats[seatIndex] = 0;
-            cout << flight.availableSeats.size() << endl;
-            for (auto& s : flight.availableSeats)
-            {
-                cout << s << " ";
-            }
-            cout << endl;
+            
             //kiem tra xem tat ca ghe da duoc dat hay chua
             bool allSeatsBooked = true;
             for (const auto& s : flight.availableSeats)
@@ -913,6 +908,7 @@ void Flight::processTickets(vector<Flight>& danhSachChuyenBay, const string& fil
                 break; 
             }
         }
+        loadFlightFromFile(danhSachChuyenBay);
         char nextChoice;
         do {
             setTextColor(15);
@@ -921,7 +917,7 @@ void Flight::processTickets(vector<Flight>& danhSachChuyenBay, const string& fil
             cin >> nextChoice;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             if (nextChoice == 'y' || nextChoice == 'Y' || nextChoice == 'n' || nextChoice == 'N') {
-                loadFlightFromFile(danhSachChuyenBay);
+                
                 break;
             }
             setTextColor(12);
@@ -1010,6 +1006,10 @@ void Flight::processReturnTicket(vector<Flight>& danhSachChuyenBay, const string
                 {
                     // Xóa vé và file liên quan
                     flight.removeTicketAndFile(selectedTicket.getFlightID(), selectedTicket.getTicketID(), "TextFiles/ChuyenBay.txt");
+                    setTextColor(10); // Màu xanh lá để thông báo thành công
+                    cout << "Da xu ly thanh cong ve co ID: " << selectedTicket.getTicketID() << " tren chuyen bay " << flightID << ".\n";
+                    setTextColor(7);
+                    ticketsToProcess.erase(ticketsToProcess.begin() + (ticketIndex - 1));
                 }
                 else
                 {
